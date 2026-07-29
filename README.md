@@ -28,7 +28,8 @@ npm run dev      # http://localhost:4180 — compiles the story first
 | Command | What it does |
 |---|---|
 | `npm run story` | Compile `story/*.ink` → `src/story.json` |
-| `npm run gate` | Compile **and** run the story gate. Green before any Slack post. |
+| `npm run gate` | Compile → structural lint → scripted playthrough. Green before any Slack post. |
+| `npm run playtest` | Just the playthrough: asserts the route to ending A still works |
 | `npm run build` | Gate → typecheck → production build |
 | `uv run --script tools/smoke_audio.py` | Probe the Rupert audio endpoints |
 
@@ -68,12 +69,30 @@ that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_0
 Claim prose lives in the `gain()` call and nowhere else, so writers never touch
 TypeScript.
 
+## The three selves
+
+Same person, three accommodations with the same guilt. Full notes in `story/BIBLE.md`.
+
+| | Register | Gives | Hides |
+|---|---|---|---|
+| **T-3** *the one who stayed* | lowercase, run-on, wrecked | the emotional truth | nothing — he just doesn't know |
+| **T-7** *the one who atoned* | timestamps, clinical, never swears | verifiable times and sequence | where *he* was, 01:40–01:55 |
+| **T-12** *the one who got out* | clipped, edited, no typos | the best-argued claims in the game — three are false | why he's lying, until the end |
+
+T-7's precision is his armour and also what betrays him: he accounts for every minute
+except fifteen, and hands the player that gap without ever admitting to one.
+T-12 sends **no voice notes**, and the absence is a clue.
+
 ## Status
 
-Week 1 of a 4–6 week vertical slice. TIMELINE-3 plays end to end; T-7 and T-12 are
-present but unreachable by design. Art and audio are placeholders — the frames are
-built so later passes are wiring, not redesign.
+Week 2 of a 4–6 week vertical slice. All three selves play end to end and the full
+cross-examination web is verified. Art and audio are placeholders — the frames are
+built so later passes are wiring, not redesign. Endings are next.
 
-Story gate: `claims 4/9 obtainable · 81 paths walked · 3/3 entries terminate`
+```
+story gate: claims 9/9 obtainable · 4/9 contestable · 0 orphan
+            672 paths walked · 27 quote pairs · 7/7 entries terminate
+playtest:   PASS — route to ending A verified (9/9 claims, 4 contested)
+```
 
 See `story/BIBLE.md` for the design, `docs/AUDIO_FINDINGS.md` for the audio contracts.

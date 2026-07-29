@@ -1,8 +1,9 @@
 # SURVIVOR BIAS — story bible v1
 
-> **Status: DRAFT, needs Harold's sign-off on §1 before dialogue drafting proceeds.**
-> Everything downstream (all `.ink`, all VO, all evidence art) depends on §1 and §2.
-> Kill or change it now, cheaply, rather than in week 4.
+> **Status: §1 SIGNED OFF (Harold, 2026-07-29). Nell is locked.**
+> All three selves are written and the cross-examination web is verified end to
+> end (`npm run gate`). Remaining open questions are in §8 — none of them block
+> writing.
 
 ---
 

@@ -89,6 +89,7 @@ const quotedTexts = new Map(); // claim id -> display text
 const endings = new Set();
 let paths = 0;
 let deadEnds = 0;
+let quotePairs = 0;
 
 function freshStory() {
   return new Story(compiled);
@@ -191,6 +192,64 @@ function walk(entry) {
 const entries = ['boot', ...new Set(requiredKnots)];
 for (const e of entries) walk(e);
 
+// ---------------------------------------------------------------------------
+// Quote coverage.
+//
+// Cross-examination is the core mechanic, and the plain walk above never
+// touches it: the UI sets the `quoting` variable before jumping to a quote
+// knot, so a walker that doesn't set it only ever sees the `else` branch. That
+// left the gate reporting 1 contestable claim when the web actually wires up
+// far more.
+//
+// So: every claim × every quote knot. Also catches the failure mode where a
+// quote handler is unreachable because `quoting` was declared as a LIST — a
+// raw string assignment throws inside inkjs.
+// ---------------------------------------------------------------------------
+const quoteKnots = [...new Set(requiredKnots)].filter((k) => k.endsWith('_quote'));
+const quoteHits = new Map(); // knot -> count of claims it responds specifically to
+
+for (const knot of quoteKnots) {
+  let specific = 0;
+  for (const claim of declaredClaims) {
+    const s = freshStory();
+    try {
+      s.variablesState['quoting'] = claim;
+    } catch (err) {
+      errors.push(
+        `cannot assign a string to ink var 'quoting' (${err.message ?? err}) — ` +
+          'declare it as `VAR quoting = ""`, not a LIST',
+      );
+      break;
+    }
+
+    let text = '';
+    try {
+      s.ChoosePathString(knot);
+      let depth = 0;
+      while (s.canContinue && depth++ < MAX_DEPTH) {
+        text += s.Continue();
+        for (const tag of s.currentTags ?? []) {
+          const ci = /^contest:\s*(C_[A-Z0-9_]+)\s*$/.exec(tag);
+          if (ci) contestedClaims.add(ci[1]);
+          const gi = /^gain:\s*(C_[A-Z0-9_]+)\s*::/.exec(tag);
+          if (gi) gainedClaims.add(gi[1]);
+        }
+      }
+    } catch (err) {
+      errors.push(`quote ${knot} with ${claim} threw: ${err.message ?? err}`);
+      continue;
+    }
+
+    if (text.trim()) specific++;
+    quotePairs++;
+  }
+  quoteHits.set(knot, specific);
+}
+
+for (const [knot, hits] of quoteHits) {
+  if (hits === 0) errors.push(`quote knot '${knot}' produced no output for any claim`);
+}
+
 // --- invariants -------------------------------------------------------------
 
 const orphans = [...declaredClaims].filter((c) => !gainedClaims.has(c));
@@ -218,9 +277,10 @@ for (const e of errors) console.error(`\x1b[31mfail\x1b[0m  ${e}`);
 
 const metric = [
   `claims ${gainedClaims.size}/${declaredClaims.size} obtainable`,
-  `${contestedClaims.size} contestable`,
+  `${contestedClaims.size}/${declaredClaims.size} contestable`,
   `${orphans.length} orphan`,
   `${paths} paths walked`,
+  `${quotePairs} quote pairs`,
   `${endings.size}/${entries.length} entries terminate`,
 ].join(' · ');
 

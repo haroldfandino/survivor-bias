@@ -3,10 +3,9 @@ import type { Contact } from './types';
 /**
  * The three branches, in the order the player meets them.
  *
- * t7 and t12 are deliberately present-but-unreachable in the week-1 slice.
- * Showing them greyed is better than hiding them: it tells the player the
- * shape of the game, and "not yet reachable" is in-fiction rather than a
- * missing-content apology.
+ * All three are reachable now. `reachable: false` stays supported because the
+ * gate keys off it — an unwritten branch can be listed without demanding its
+ * knots exist — and because ending A takes the selves offline one at a time.
  */
 export const CONTACTS: Contact[] = [
   {
@@ -25,7 +24,7 @@ export const CONTACTS: Contact[] = [
     tint: 'var(--color-t7)',
     entry: 't7_open',
     quoteEntry: 't7_quote',
-    reachable: false,
+    reachable: true,
   },
   {
     id: 't12',
@@ -34,7 +33,7 @@ export const CONTACTS: Contact[] = [
     tint: 'var(--color-t12)',
     entry: 't12_open',
     quoteEntry: 't12_quote',
-    reachable: false,
+    reachable: true,
   },
 ];
 

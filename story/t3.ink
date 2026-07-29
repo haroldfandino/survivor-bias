@@ -111,15 +111,30 @@ i thought it was one of the lads. i've thought it was one of the lads for twenty
 // Quote handler. UI sets `quoting` then jumps here.
 // ---------------------------------------------------------------------------
 === t3_quote ===
-{ quoting:
-    - C_CAR_MOVED:
+{
+    - quoting == "C_CAR_MOVED":
         who told you the car moved # from: t3 # delay: 900
         ~ contest(C_CAR_MOVED)
         that's wrong. i had the keys. i HAD them # from: t3 # delay: 1200
-    - C_FORD_LIGHT:
+        i've still got them. twenty years. they're in a drawer # from: t3 # delay: 1900
+
+    - quoting == "C_FORD_LIGHT":
         the light wasn't out # from: t3 # delay: 800
         ~ contest(C_FORD_LIGHT)
         i know it wasn't out because i remember the moths. there were moths all round it # from: t3 # delay: 1700
+        you don't get moths round a light that isn't on # from: t3 # delay: 1400
+
+    - quoting == "C_TIME_CALL":
+        half one, twenty to two, i don't know # from: t3 # delay: 1100
+        i wasn't looking at a clock. he would've been # from: t3 # delay: 1500
+        he was always the one looking at the clock # from: t3 # delay: 1300
+
+    - quoting == "C_WHO_DROVE":
+        nobody drove her # from: t3 # delay: 800
+        ~ contest(C_WHO_DROVE)
+        that's — no. she walked. i watched her walk off # from: t3 # delay: 1500
+        i watched her go and i didn't get out of the car # from: t3 # delay: 1900
+
     - else:
         yeah # from: t3 # delay: 700
         yeah that sounds about right # from: t3 # delay: 800

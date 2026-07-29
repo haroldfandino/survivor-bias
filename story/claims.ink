@@ -33,7 +33,12 @@ VAR known = ()
 VAR contested = ()
 
 // Set by the UI immediately before jumping into a `quote_*` knot.
-VAR quoting = ()
+//
+// A STRING, not a Claim list item, on purpose: the UI only has the claim id as
+// text (it parsed it out of a tag), and assigning a raw string to an ink LIST
+// variable throws inside inkjs. Quote handlers therefore compare with
+// `quoting == "C_FOO"` rather than switching on a list value.
+VAR quoting = ""
 
 // ---------------------------------------------------------------------------
 // gain(c, text, who)

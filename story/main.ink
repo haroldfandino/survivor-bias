@@ -13,6 +13,8 @@
 
 INCLUDE claims.ink
 INCLUDE t3.ink
+INCLUDE t7.ink
+INCLUDE t12.ink
 
 // Fires once, on a cold start, before any conversation is opened.
 // Tags are inline — see the header note in t3.ink for why.

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "story": "node tools/build_story.mjs",
-    "gate": "node tools/build_story.mjs && node tools/lint_story.mjs",
+    "playtest": "node tools/playtest.mjs",
+    "gate": "node tools/build_story.mjs && node tools/lint_story.mjs && node tools/playtest.mjs",
     "dev": "npm run story && vite",
     "build": "npm run gate && tsc -b && vite build",
     "lint": "oxlint",
