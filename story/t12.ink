@@ -17,6 +17,7 @@
 // ===========================================================================
 
 === t12_open ===
+{ finished: -> gone }
 { t12_open_seen: -> t12_hub }
 ~ t12_open_seen = true
 
@@ -63,6 +64,7 @@ I remember it accurately, which makes me unusual in this conversation. # from: t
 The car was moved before two. # from: t12 # delay: 1500
 It was on the verge when we arrived and it was not on the verge at dawn. I noticed because I was the only one sober enough to notice anything. # from: t12 # delay: 2700
 Whatever he's told you about keys in a jacket — ask yourself why a man clings to a detail that lets him off. # from: t12 # delay: 2800
+~ tick()
 -> t12_hub
 
 === t12_ford ===
@@ -72,6 +74,7 @@ The light at the ford was out. # from: t12 # delay: 1400
 It had been out for a fortnight. The council did nothing about it until afterwards, and then they were very quick. # from: t12 # delay: 2600
 That is the whole explanation. There is nothing underneath it. # from: t12 # delay: 2200
 A nineteen-year-old walked toward water she couldn't see. That's not a mystery. It's just a thing that happened. # from: t12 # delay: 2800
+~ tick()
 -> t12_hub
 
 === t12_home ===
@@ -81,6 +84,7 @@ Someone drove her. # from: t12 # delay: 1300
 Not one of us. Someone from the house. # from: t12 # delay: 1600
 I never learned the name and I stopped wanting to. # from: t12 # delay: 1900
 It matters because it means she got in a car willingly, and everything after that was out of anyone's hands. # from: t12 # delay: 2700
+~ tick()
 -> t12_hub
 
 // The absence of his voice, made visible. Cheap to write, does a lot of work.
@@ -94,6 +98,7 @@ No. # from: t12 # delay: 1200
 
 - I haven't heard myself speak about that night out loud in nineteen years. # from: t12 # delay: 2400
 I've written about it. Written is fine. Written you can go back and fix. # from: t12 # delay: 2500
+~ tick()
 -> t12_hub
 
 // He steers hard away from T-7's gap. This is where a careful player smells it.
@@ -109,6 +114,7 @@ He's a paramedic. He thinks in intervals. Of course there's a gap — he's given
 
 - Leave him alone. Look at the light and the car and the fact that she got into one. # from: t12 # delay: 2600
 That's where this ends. I've had two decades to find somewhere better for it to end and there isn't one. # from: t12 # delay: 2800
+~ tick()
 -> t12_hub
 
 // ---------------------------------------------------------------------------
@@ -126,6 +132,7 @@ If you fix it tonight, I don't become a man who overcame something. # from: t12 
 I become a man who moved away from his sister for no reason at all. # from: t12 # delay: 2800
 So no. I don't want you to save her. # from: t12 # delay: 2400
 And I'd like you to understand that I know exactly how that sounds, and I'm saying it anyway, because you're me and there's no point pretending. # from: t12 # delay: 3000
+~ tick()
 -> t12_hub
 
 // ---------------------------------------------------------------------------
@@ -162,6 +169,7 @@ And I'd like you to understand that I know exactly how that sounds, and I'm sayi
     - else:
         I'm not going to help you dress that up. # from: t12 # delay: 1600
 }
+~ tick()
 -> t12_hub
 
 VAR t12_open_seen = false

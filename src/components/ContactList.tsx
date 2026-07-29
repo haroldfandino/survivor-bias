@@ -12,6 +12,7 @@ import { Avatar } from './Avatar';
 export function ContactList() {
   const { threads, unread, openContact, armed, claims, arm } = useGame();
   const armedClaim = claims.find((c) => c.id === armed);
+  const branchCount = CONTACTS.filter((c) => c.id !== 'prime' && c.reachable).length;
 
   return (
     <div className="flex h-full flex-col">
@@ -35,7 +36,9 @@ export function ContactList() {
           <>
             <h1 className="text-[1.0625rem] font-medium tracking-tight">Branches</h1>
             <p className="mt-0.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-ink-faint">
-              3 reachable · signal unstable
+              {/* Counts branches only — TONIGHT is the player's own timeline,
+                  not one of them. Derived so it can't drift from CONTACTS. */}
+              {branchCount} reachable · signal unstable
             </p>
           </>
         )}

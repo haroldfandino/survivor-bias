@@ -1,4 +1,5 @@
-export type Sender = 'you' | 't3' | 't7' | 't12' | 'system';
+/** `prime` is the player's own timeline — the endgame surface, not a person. */
+export type Sender = 'you' | 't3' | 't7' | 't12' | 'prime' | 'system';
 
 /** One chat bubble. `delay` is how long to hold the typing indicator first. */
 export interface Message {

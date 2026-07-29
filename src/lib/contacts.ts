@@ -35,6 +35,20 @@ export const CONTACTS: Contact[] = [
     quoteEntry: 't12_quote',
     reachable: true,
   },
+  {
+    // Not a person — the player's own night, and the decision waiting in it.
+    // Deliberately listed from the very first screen so it sits there being
+    // unopenable: ink turns the player away until they have a reason to act.
+    // That dread is the point, and it's also how the deadline stays *felt*
+    // rather than shown — there is no timer anywhere in this game.
+    id: 'prime',
+    label: 'TONIGHT',
+    blurb: 'your timeline',
+    tint: 'var(--color-accent)',
+    entry: 'endgame',
+    quoteEntry: 'endgame',
+    reachable: true,
+  },
 ];
 
 export const CONTACTS_BY_ID = Object.fromEntries(

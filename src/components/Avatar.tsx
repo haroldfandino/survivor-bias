@@ -12,7 +12,8 @@ import { CONTACTS_BY_ID } from '../lib/contacts';
 export function Avatar({ id, size = 40 }: { id: Sender; size?: number }) {
   const contact = CONTACTS_BY_ID[id];
   const tint = contact?.tint ?? 'var(--color-ink-faint)';
-  const num = id.replace('t', '');
+  // The player's own timeline has no number — it's the one that hasn't branched.
+  const num = id === 'prime' ? '·' : id.replace('t', '');
 
   return (
     <div

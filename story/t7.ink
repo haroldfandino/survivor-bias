@@ -17,6 +17,7 @@
 // ===========================================================================
 
 === t7_open ===
+{ finished: -> gone }
 { t7_open_seen: -> t7_hub }
 ~ t7_open_seen = true
 
@@ -65,6 +66,7 @@ Right. From the top, and I'll keep to what I actually saw. # from: t7 # delay: 1
 02:05 — that's when I start looking properly. # from: t7 # delay: 1800
 ~ gain(C_TIME_GAP, "T-7 accounts for every minute of that night except 01:40 to 01:55.", "t7")
 That's the whole of it. Ask me anything inside that and I'll tell you. # from: t7 # delay: 2100
+~ tick()
 -> t7_hub
 
 === t7_call ===
@@ -73,6 +75,7 @@ I don't know who she called. # from: t7 # delay: 1300
 I know it wasn't the house phone and I know it wasn't a taxi, because I checked both. Later. When checking things was all there was to do. # from: t7 # delay: 2600
 Forty seconds is a long time for no answer and a short time for a conversation. # from: t7 # delay: 2200
 Make of that what you like. I've made everything of it I can. # from: t7 # delay: 2000
+~ tick()
 -> t7_hub
 
 === t7_job ===
@@ -81,6 +84,7 @@ Twenty-two years next March. # from: t7 # delay: 1300
 People assume that's penance. It isn't. Penance implies it helps. # from: t7 # delay: 2200
 It's just that I know exactly how long fifteen minutes is now. To the second. In a way I didn't then. # from: t7 # delay: 2600
 I know what can be undone inside fifteen minutes and I know what can't. # from: t7 # delay: 2400
+~ tick()
 -> t7_hub
 
 // ---------------------------------------------------------------------------
@@ -98,6 +102,7 @@ You're asking me to account for what I did, which is a different question, and y
 
 - Ask him. He was in the car the whole time. He'll tell you nothing happened. # from: t7 # delay: 2300
 He genuinely believes that. I've never taken it off him. # from: t7 # delay: 2000
+~ tick()
 -> t7_hub
 
 // Second press, only after the first. He comes closest to it here and stops.
@@ -109,6 +114,7 @@ At 01:40 she came off that porch and she said something to me. # from: t7 # dela
 And at 01:55 I was at the gate, and I was on my own. # from: t7 # delay: 2400
 You can do the arithmetic. I've done it every night for twenty-two years and it comes out the same way every time. # from: t7 # delay: 2800
 Don't ask me to say it. You're the only one who can still not need me to. # from: t7 # delay: 2600
+~ tick()
 -> t7_hub
 
 // ---------------------------------------------------------------------------
@@ -150,6 +156,7 @@ Don't ask me to say it. You're the only one who can still not need me to. # from
         That's consistent with what I saw. # from: t7 # delay: 1400
         I won't embroider it for you. # from: t7 # delay: 1300
 }
+~ tick()
 -> t7_hub
 
 VAR t7_open_seen = false

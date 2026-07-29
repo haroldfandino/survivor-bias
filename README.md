@@ -83,16 +83,30 @@ T-7's precision is his armour and also what betrays him: he accounts for every m
 except fifteen, and hands the player that gap without ever admitting to one.
 T-12 sends **no voice notes**, and the absence is a clue.
 
+## Endings, and the deadline
+
+Three endings, all reached by **choosing** — never by timing out. `TONIGHT` sits in the
+contact list from the first screen and refuses to open until you have a reason to act.
+
+- **A — Prevented.** You go nowhere. You sit still and pick up.
+- **B — Substituted.** You act, decisively, on the best-argued thing you were told.
+- **C — Refused.** You put the phone down. No reproach, no score.
+
+**There is no timer anywhere.** A hidden `pressure` counter advances on each substantive
+beat and expresses itself only in the fiction — system lines naming the hour, and the
+endgame's framing tightening. The deadline that actually bites is running out of things
+left to ask. Details in `story/BIBLE.md` §6.
+
 ## Status
 
-Week 2 of a 4–6 week vertical slice. All three selves play end to end and the full
-cross-examination web is verified. Art and audio are placeholders — the frames are
-built so later passes are wiring, not redesign. Endings are next.
+Week 2 of a 4–6 week vertical slice. **Story-complete**: all three selves, the full
+cross-examination web, and all three endings play end to end. Art and audio are
+placeholders — the frames are built so later passes are wiring, not redesign.
 
 ```
 story gate: claims 9/9 obtainable · 4/9 contestable · 0 orphan
-            672 paths walked · 27 quote pairs · 7/7 entries terminate
-playtest:   PASS — route to ending A verified (9/9 claims, 4 contested)
+            673 paths walked · 27 quote pairs · 8/8 entries terminate
+playtest:   PASS — 5 scenarios, all 3 endings verified
 ```
 
 See `story/BIBLE.md` for the design, `docs/AUDIO_FINDINGS.md` for the audio contracts.

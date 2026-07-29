@@ -16,6 +16,7 @@
 // ===========================================================================
 
 === t3_open ===
+{ finished: -> gone }
 { t3_open_seen: -> t3_hub }
 ~ t3_open_seen = true
 
@@ -48,6 +49,7 @@ listen. it hasn't happened yet for you. tonight. it's tonight # from: t3 # delay
 ~ gain(C_TIME_LEFT, "Nell leaves the house on foot between 01:20 and 02:05.", "t3")
 she leaves the house at like half one. on foot. down the river road # from: t3 # delay: 1500
 i've had twenty years to think about that road # from: t3 # delay: 1300
+~ tick()
 -> t3_hub
 
 // ---------------------------------------------------------------------------
@@ -77,6 +79,7 @@ she couldn't have driven anywhere. she never could have. i had them the whole ti
 { contested ? C_CAR_MOVED:
     and before you say it — no. the car did not move. i don't care who told you that # from: t3 # delay: 1500
 }
+~ tick()
 -> t3_hub
 
 === t3_ford ===
@@ -85,6 +88,7 @@ she couldn't have driven anywhere. she never could have. i had them the whole ti
 it'd been raining since the tuesday # from: t3 # delay: 900
 the ford was up over the stones. you couldn't see where the edge was # from: t3 # delay: 1500
 that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_01.png
+~ tick()
 -> t3_hub
 
 === t3_porch ===
@@ -93,6 +97,7 @@ that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_0
 there was someone on the porch with her # from: t3 # delay: 1000
 i saw them from the car. i was in the car. i was # from: t3 # delay: 1200
 i wasn't in a state to go and see who it was # from: t3 # delay: 1400 # voice: t3_porch_01
+~ tick()
 -> t3_hub
 
 // Only reachable once the player has learned about T-7's gap elsewhere —
@@ -105,6 +110,7 @@ hang on. you're not asking about me are you # from: t3 # delay: 1300
 ~ contest(C_TIME_GAP)
 there was someone coming back up from the water # from: t3 # delay: 1800
 i thought it was one of the lads. i've thought it was one of the lads for twenty years # from: t3 # delay: 2000
+~ tick()
 -> t3_hub
 
 // ---------------------------------------------------------------------------
@@ -139,6 +145,7 @@ i thought it was one of the lads. i've thought it was one of the lads for twenty
         yeah # from: t3 # delay: 700
         yeah that sounds about right # from: t3 # delay: 800
 }
+~ tick()
 -> t3_hub
 
 VAR t3_open_seen = false

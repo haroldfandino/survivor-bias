@@ -104,10 +104,38 @@ about it to keep you away from it.
 |---|---|---|
 | **A — Prevented** | Extract T-7's gap *and* discredit ≥2 of T-12's false claims | You act on the small true thing. Nell lives. The other three go quiet — you can see them stop being reachable, one at a time. |
 | **B — Substituted** | Act on a T-12 claim you never contested | You intervene on the wrong detail. She dies differently. The selves are *relieved*, and that's the horror. |
-| **C — Refused** | Reach the deadline without acting | You don't intervene. Ambiguous whether you couldn't or wouldn't. T-3's last message is the gut-punch. |
+| **C — Refused** | Choose to put the phone down | You let it ring. Ambiguous whether you couldn't or wouldn't. T-3's last message: *"i didn't pick up either. none of us did. that's the whole thing."* |
 
 Ending C must not read as a fail state. It's the quietest and it should be the one people argue
-about.
+about. So it carries no reproach, no score, and no "you could have" — and it is reached by
+*choosing*, never by timing out, because a timeout would read as failure.
+
+### The payoff
+
+T-7 establishes that Nell made a call at 01:38 lasting forty seconds, and hands us the line
+that gives it away: *"Forty seconds is a long time for no answer and a short time for a
+conversation."*
+
+It rang out. She called her brother and nobody picked up — T-3 was drunk in a car, T-7 was at
+the gate, T-12 was asleep three hundred miles away.
+
+**In your timeline you are awake at 01:38, holding your phone, because you have spent all night
+on it talking to them.** The thing that saves her is that you answer. The app is the mechanism.
+That is why the divergence is small, why nobody ever agreed on what it was, and why the player
+had to be on their phone for the whole game.
+
+### The deadline is felt, not shown
+
+No countdown, no clock anywhere in the UI. `tick()` in `endings.ink` advances a hidden
+`pressure` counter on each substantive beat, and its only expression is diegetic: system lines
+naming the hour (`23:10` → `00:40` → `01:20` → `01:31`), and the endgame's framing shifting from
+*"Your own night is quiet"* to *"It's twenty past one."* Past `LATE` the player can no longer
+back out and keep talking.
+
+The deadline that actually bites is **running out of things left to ask**.
+
+`TONIGHT` sits in the contact list from the first screen, unopenable — ink turns the player away
+until they have a reason to act. Seeing the decision waiting there is the point.
 
 ## 7. Voice / VO notes
 

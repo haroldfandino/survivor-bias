@@ -12,6 +12,7 @@
 // ===========================================================================
 
 INCLUDE claims.ink
+INCLUDE endings.ink
 INCLUDE t3.ink
 INCLUDE t7.ink
 INCLUDE t12.ink
