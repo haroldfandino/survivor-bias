@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Mirrors design/survivor-bias-tokens.json. That file is the source of truth —
+   if you change a value, change it there first.
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-bg: #0b0d10;
+  --color-raised: #12151a;
+  --color-input: #171b21;
+  --color-hairline: #22272f;
+  --color-ink: #e4e6ea;
+  --color-ink-dim: #8a929e;
+  --color-ink-faint: #565e6a;
+  --color-accent: #c8402f;
+  --color-accent-dim: #7a2a1f;
+  --color-ok: #4e8c6a;
+  --color-warn: #c89a3c;
+
+  /* One key colour per branch — the primary visual language. */
+  --color-t-prime: #e4e6ea;
+  --color-t3: #e08b3c;
+  --color-t7: #5e9c8a;
+  --color-t12: #4a6fa5;
+
+  --radius-bubble: 1.125rem;
+
+  --font-ui: ui-sans-serif, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+
+  --ease-msg: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  /* An app-sim should not feel like a web page. */
+  overscroll-behavior: none;
+  user-select: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Global mediation layer.
+
+   Art direction: everything the player sees is evidence — a still, a call
+   frame, a scan. Grain and scanlines sit ABOVE the whole app rather than
+   being baked per-image, so inconsistency between generated portraits reads
+   as transmission noise instead of an asset bug. This is load-bearing, not
+   decoration: see design/style-lock.md.
+   --------------------------------------------------------------------------- */
+.mediated::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+.mediated::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 61;
+  pointer-events: none;
+  opacity: 0.02;
+  background: repeating-linear-gradient(to bottom, transparent 0 2px, #000 2px 3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Chat scrollback: visible enough to grab, quiet enough to ignore. */
+.scroll-quiet {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hairline) transparent;
+}
+.scroll-quiet::-webkit-scrollbar {
+  width: 8px;
+}
+.scroll-quiet::-webkit-scrollbar-thumb {
+  background: var(--color-hairline);
+  border-radius: 4px;
+}
+
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.msg-in {
+  animation: msg-in 180ms var(--ease-msg) both;
+}
+
+@keyframes typing-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}
+.typing-dot {
+  animation: typing-dot 1.1s ease-in-out infinite;
+}
