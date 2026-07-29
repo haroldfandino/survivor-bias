@@ -28,3 +28,6 @@ src/story.json
 
 # audio probe output
 assets/audio/_smoke/
+
+# ungraded flux output, cached for re-grading without re-generating
+assets/_raw/

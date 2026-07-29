@@ -62,7 +62,7 @@ That should tell you whose account to weight. # from: t12 # delay: 2000
 I remember it accurately, which makes me unusual in this conversation. # from: t12 # delay: 2000
 ~ gain(C_CAR_MOVED, "T-12: the car was moved before 02:00 — it wasn't on the verge at dawn.", "t12")
 The car was moved before two. # from: t12 # delay: 1500
-It was on the verge when we arrived and it was not on the verge at dawn. I noticed because I was the only one sober enough to notice anything. # from: t12 # delay: 2700
+It was on the verge when we arrived and it was not on the verge at dawn. I noticed because I was the only one sober enough to notice anything. # from: t12 # delay: 2700 # img: evidence/verge_dawn.webp
 Whatever he's told you about keys in a jacket — ask yourself why a man clings to a detail that lets him off. # from: t12 # delay: 2800
 ~ tick()
 -> t12_hub

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Message } from '../lib/types';
 import { CONTACTS_BY_ID } from '../lib/contacts';
 
@@ -34,24 +35,43 @@ export function MessageBubble({ msg }: { msg: Message }) {
           boxShadow: mine ? 'none' : `inset 0 0 0 1px ${tint}22`,
         }}
       >
-        {msg.img && (
-          <div
-            className="mb-2 -mx-1 overflow-hidden rounded"
-            style={{ boxShadow: `inset 0 0 0 1px ${tint}33` }}
-          >
-            {/* Evidence art lands here in week 3. Until then the frame is
-                honest about being empty rather than showing a broken image. */}
-            <div
-              className="grid h-36 place-items-center font-mono text-[0.625rem] uppercase tracking-[0.12em]"
-              style={{ background: `linear-gradient(160deg, ${tint}18, #0b0d10)`, color: `${tint}99` }}
-            >
-              {msg.img.replace(/^.*\//, '')}
-            </div>
-          </div>
-        )}
+        {msg.img && <Attachment src={msg.img} tint={tint} />}
 
         {msg.voice ? <VoiceNote tint={tint} /> : msg.text}
       </div>
+    </div>
+  );
+}
+
+/**
+ * A photo attachment.
+ *
+ * Assets are pre-graded to the sender's branch duotone by tools/gen_art.py, so
+ * nothing needs tinting here — the frame just has to not fight them. Renders a
+ * labelled placeholder rather than a broken image if the file is absent.
+ */
+function Attachment({ src, tint }: { src: string; tint: string }) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <div
+      className="mb-2 -mx-1 overflow-hidden rounded"
+      style={{ boxShadow: `inset 0 0 0 1px ${tint}33` }}
+    >
+      {failed ? (
+        <div
+          className="grid h-36 place-items-center font-mono text-[0.625rem] uppercase tracking-[0.12em]"
+          style={{ background: `linear-gradient(160deg, ${tint}18, #0b0d10)`, color: `${tint}99` }}
+        >
+          {src.replace(/^.*\//, '')}
+        </div>
+      ) : (
+        // Eager, not lazy. An attachment arriving is a story beat, and the whole
+        // evidence set is ~330 KB — a frame that fills in after the bubble lands
+        // reads as a glitch. (It also makes the image reliably present for
+        // automated checks, where a hidden tab never fires the lazy observer.)
+        <img src={`/${src}`} alt="" className="block w-full" onError={() => setFailed(true)} />
+      )}
     </div>
   );
 }

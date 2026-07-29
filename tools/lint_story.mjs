@@ -9,7 +9,7 @@
  * Run: node tools/lint_story.mjs   (or `npm run gate`)
  */
 import { Story } from 'inkjs';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -62,6 +62,43 @@ const requiredKnots = (() => {
   }
   return knots;
 })();
+
+/**
+ * Every `# img:` must point at a file that exists.
+ *
+ * Added after a rename to .webp left story.json referencing .png: the app
+ * silently fell back to a placeholder frame, which looks like a styling choice
+ * rather than a missing asset. Broken art must fail the build, not degrade
+ * quietly.
+ */
+{
+  // Scan code only. The file headers document the tag contract with examples
+  // like `# img: <path>`, and scanning raw source flags those as missing files.
+  // Split on /\r?\n/, not '\n'. These files are CRLF, and JS `.` does not match
+  // \r — so with a trailing \r left on each line, /\/\/.*$/ never anchors and
+  // the comment survives the strip.
+  const inkCode = inkSource
+    .split(/\r?\n/)
+    .map((l) => l.replace(/\/\/.*$/, ''))
+    .join('\n');
+
+  for (const m of inkCode.matchAll(/#\s*img:\s*([^\s#]+)/g)) {
+    const rel = m[1];
+    if (!existsSync(join(root, 'public', rel))) {
+      errors.push(`# img: ${rel} — no such file under public/`);
+    }
+  }
+  // Voice notes are wired in week 4; warn rather than fail until then.
+  const voices = [...inkCode.matchAll(/#\s*voice:\s*([^\s#]+)/g)].map((m) => m[1]);
+  const missingVoices = voices.filter(
+    (v) => !existsSync(join(root, 'public', 'audio', `${v}.mp3`)),
+  );
+  if (missingVoices.length) {
+    warnings.push(
+      `${missingVoices.length} voice note(s) not yet recorded: ${missingVoices.join(', ')}`,
+    );
+  }
+}
 
 /** Tags authored on their own line — these silently mis-bind to the NEXT line. */
 {

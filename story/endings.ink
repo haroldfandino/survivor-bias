@@ -124,7 +124,9 @@ You don't go anywhere. # from: system # delay: 1800
 You sit on the edge of your bed at twenty past one in the morning with your phone in your hand, and you wait. # from: system # delay: 2600
 
 01:38. # from: system # delay: 2800
-NELL # from: system # delay: 1400
+// The only time Nell is ever shown. Held back for exactly this beat — see
+// BIBLE.md §7: never speak her or show her before an ending.
+NELL # from: system # delay: 1400 # img: evidence/nell.webp
 
     * [Answer it.]
 

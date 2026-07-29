@@ -87,7 +87,7 @@ she couldn't have driven anywhere. she never could have. i had them the whole ti
 ~ gain(C_FORD_WATER, "The ford was running high — it had rained for two days.", "t3")
 it'd been raining since the tuesday # from: t3 # delay: 900
 the ford was up over the stones. you couldn't see where the edge was # from: t3 # delay: 1500
-that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_01.png
+that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_01.webp
 ~ tick()
 -> t3_hub
 
@@ -95,7 +95,7 @@ that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_0
 ~ t3_asked_porch = true
 ~ gain(C_WHO_ARGUED, "Nell argued with someone on the porch before she left.", "t3")
 there was someone on the porch with her # from: t3 # delay: 1000
-i saw them from the car. i was in the car. i was # from: t3 # delay: 1200
+i saw them from the car. i was in the car. i was # from: t3 # delay: 1200 # img: evidence/porch_night.webp
 i wasn't in a state to go and see who it was # from: t3 # delay: 1400 # voice: t3_porch_01
 ~ tick()
 -> t3_hub

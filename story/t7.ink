@@ -65,6 +65,7 @@ Right. From the top, and I'll keep to what I actually saw. # from: t7 # delay: 1
 01:55 — I'm at the gate. The music's still going. # from: t7 # delay: 2000
 02:05 — that's when I start looking properly. # from: t7 # delay: 1800
 ~ gain(C_TIME_GAP, "T-7 accounts for every minute of that night except 01:40 to 01:55.", "t7")
+I wrote it out properly, years ago. # from: t7 # delay: 1900 # img: evidence/timeline_scan.webp
 That's the whole of it. Ask me anything inside that and I'll tell you. # from: t7 # delay: 2100
 ~ tick()
 -> t7_hub

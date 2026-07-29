@@ -97,16 +97,44 @@ beat and expresses itself only in the fiction — system lines naming the hour, 
 endgame's framing tightening. The deadline that actually bites is running out of things
 left to ask. Details in `story/BIBLE.md` §6.
 
+## Art
+
+`uv run --script tools/gen_art.py` generates and grades every asset. Full rationale in
+`design/style-lock.md`; the short version:
+
+Local ComfyUI has no ControlNet or LoRAs, so **one face cannot be pinned across
+generations** — fatal for a game about one man in three timelines. So every image is
+presented as *evidence* (a call frame, a still, a scan), which makes drift read as
+transmission noise rather than a bug. One duotone grade per branch does the unifying,
+faces are prompted half-shadowed and off-angle, and portraits are small circular crops.
+
+Two real gates, with real numbers:
+
+- **LPIPS drift** across the three portraits must stay in `0.15–0.78` — below and they're
+  one photo re-graded, above and they stop being the same man.
+  Current: `t3/t7 0.52 · t3/t12 0.53 · t7/t12 0.40`
+- **NIMA aesthetic** floor 5.0; the set lands 5.2–6.2.
+
+The story gate additionally **fails the build** if any `# img:` points at a missing file.
+
+Documents are composited, not generated: `timeline_scan` is a blank generated page with
+the real times drawn on, because flux cannot write. That means the 01:40 → 01:55 gap is
+legible on the page — the central mystery made visible.
+
+All eight assets are WebP and total **400 KB**.
+
 ## Status
 
-Week 2 of a 4–6 week vertical slice. **Story-complete**: all three selves, the full
-cross-examination web, and all three endings play end to end. Art and audio are
-placeholders — the frames are built so later passes are wiring, not redesign.
+Week 3 of a 4–6 week vertical slice. **Story-complete and illustrated**: all three
+selves, the full cross-examination web, all three endings, portraits and evidence stills.
+Audio is the remaining placeholder.
 
 ```
 story gate: claims 9/9 obtainable · 4/9 contestable · 0 orphan
             673 paths walked · 27 quote pairs · 8/8 entries terminate
 playtest:   PASS — 5 scenarios, all 3 endings verified
+art gates:  LPIPS 3/3 in band · NIMA 8/8 above floor
+payload:    104 KB js + 400 KB art
 ```
 
 See `story/BIBLE.md` for the design, `docs/AUDIO_FINDINGS.md` for the audio contracts.
