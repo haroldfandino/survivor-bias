@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { StoryEngine, type Beat } from '../lib/ink';
 import { CONTACTS_BY_ID } from '../lib/contacts';
+import { ambience } from '../lib/ambience';
 import type { Claim, Message, Sender } from '../lib/types';
 
 const SAVE_KEY = 'survivor-bias/save/v1';
@@ -25,6 +26,9 @@ interface GameState {
    * message queue is parked — the moment owns its own pacing.
    */
   screen: string | null;
+  /** ink's pressure counter, mirrored so the ambience can track it. */
+  pressure: number;
+  muted: boolean;
 
   boot: () => void;
   openContact: (id: Sender) => void;
@@ -35,6 +39,7 @@ interface GameState {
   toggleEvidence: () => void;
   /** Called by the overlay when its sequence is done (or skipped). */
   dismissScreen: () => void;
+  toggleMute: () => void;
   reset: () => void;
 }
 
@@ -98,6 +103,10 @@ export const useGame = create<GameState>((set, get) => {
         set({ typing: msg.from });
         await sleep(Math.min(msg.delay, MAX_DELAY));
       }
+      // A blip for anything that arrives; the player's own echoes are silent
+      // because `choose` already played the send sound.
+      if (msg.from !== 'you') ambience.ping('receive');
+
       set((s) => ({
         typing: null,
         threads: {
@@ -111,7 +120,10 @@ export const useGame = create<GameState>((set, get) => {
       }));
     }
 
-    set({ typing: null, choices: beat.choices });
+    // Mirror ink's pressure so the tension layer tracks the night closing in.
+    const pressure = get().engine.pressure();
+    set({ typing: null, choices: beat.choices, pressure });
+    ambience.setPressure(pressure);
     persist();
   }
 
@@ -138,12 +150,16 @@ export const useGame = create<GameState>((set, get) => {
     evidenceOpen: false,
     armed: null,
     screen: null,
+    pressure: 0,
+    muted: ambience.isMuted(),
 
     boot() {
       // React StrictMode mounts effects twice in dev; without this the boot
       // knot is entered (and its messages queued) two times over.
       if (booted) return;
       booted = true;
+      // Audio can only start after a user gesture; arm a one-shot listener.
+      ambience.arm();
 
       const engine = get().engine;
       const raw = localStorage.getItem(SAVE_KEY);
@@ -191,6 +207,7 @@ export const useGame = create<GameState>((set, get) => {
       // brackets (`* [Who is this?]`) so ink deliberately withholds it from
       // output — without this the player appears to say nothing at all.
       const spoken = choices[index]?.text;
+      if (spoken) ambience.ping('send');
       set((s) => ({
         choices: [],
         threads: spoken
@@ -219,6 +236,12 @@ export const useGame = create<GameState>((set, get) => {
       set((s) => ({ evidenceOpen: !s.evidenceOpen }));
     },
 
+    toggleMute() {
+      const next = !get().muted;
+      ambience.setMuted(next);
+      set({ muted: next });
+    },
+
     dismissScreen() {
       if (!get().screen) return;
       set({ screen: null });
@@ -245,6 +268,7 @@ export const useGame = create<GameState>((set, get) => {
         evidenceOpen: false,
         armed: null,
         screen: null,
+        pressure: 0,
       });
       get().boot();
     },

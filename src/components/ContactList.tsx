@@ -10,7 +10,7 @@ import { Avatar } from './Avatar';
  * changes to say so.
  */
 export function ContactList() {
-  const { threads, unread, openContact, armed, claims, arm } = useGame();
+  const { threads, unread, openContact, armed, claims, arm, muted, toggleMute } = useGame();
   const armedClaim = claims.find((c) => c.id === armed);
   const branchCount = CONTACTS.filter((c) => c.id !== 'prime' && c.reachable).length;
 
@@ -34,12 +34,36 @@ export function ContactList() {
           </>
         ) : (
           <>
-            <h1 className="text-[1.0625rem] font-medium tracking-tight">Branches</h1>
-            <p className="mt-0.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-ink-faint">
-              {/* Counts branches only — TONIGHT is the player's own timeline,
-                  not one of them. Derived so it can't drift from CONTACTS. */}
-              {branchCount} reachable · signal unstable
-            </p>
+            <div className="flex items-start justify-between">
+              <div>
+                <h1 className="text-[1.0625rem] font-medium tracking-tight">Branches</h1>
+                <p className="mt-0.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-ink-faint">
+                  {/* Counts branches only — TONIGHT is the player's own timeline,
+                      not one of them. Derived so it can't drift from CONTACTS. */}
+                  {branchCount} reachable · signal unstable
+                </p>
+              </div>
+              {/* Discoverable on the first screen. Ambient sound in a text game
+                  needs to be one tap away from off, and it persists. */}
+              <button
+                onClick={toggleMute}
+                aria-label={muted ? 'Unmute sound' : 'Mute sound'}
+                title={muted ? 'Sound off' : 'Sound on'}
+                className="-mr-1 grid h-8 w-8 shrink-0 place-items-center rounded-full text-ink-faint transition-colors hover:bg-raised hover:text-ink"
+              >
+                {muted ? (
+                  <svg width="15" height="14" viewBox="0 0 15 14" fill="none" stroke="currentColor" strokeWidth="1.4">
+                    <path d="M1 5h2.5L7 2v10L3.5 9H1z" />
+                    <path d="M10 5l4 4M14 5l-4 4" />
+                  </svg>
+                ) : (
+                  <svg width="15" height="14" viewBox="0 0 15 14" fill="none" stroke="currentColor" strokeWidth="1.4">
+                    <path d="M1 5h2.5L7 2v10L3.5 9H1z" />
+                    <path d="M10 4.5a4 4 0 010 5M12.2 2.6a7 7 0 010 8.8" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </>
         )}
       </header>

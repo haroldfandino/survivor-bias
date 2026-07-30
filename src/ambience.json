@@ -1,0 +1,18 @@
+{
+  "amb_bed": {
+    "duration": 27.04,
+    "loop": true
+  },
+  "amb_tension": {
+    "duration": 27.04,
+    "loop": true
+  },
+  "sfx_receive": {
+    "duration": 0.5,
+    "loop": false
+  },
+  "sfx_send": {
+    "duration": 0.31,
+    "loop": false
+  }
+}

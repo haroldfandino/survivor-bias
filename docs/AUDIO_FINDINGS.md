@@ -56,7 +56,7 @@ twice.
 | `/v1/audio/stable/generate` (Stable Audio 3.0) | ✅ **works** | Honoured `duration: 2` exactly → 2.00 s / 44.1 kHz stereo. SFX unblocked. |
 | `/v1/audio/chatterbox` — plain TTS | ✅ works | 2.00 s / 24 kHz mono. A usable second engine. |
 | `/v1/audio/chatterbox` — **voice cloning** | ❌ **broken** | Every multipart reference field 500s. See below. |
-| `/v1/music/generate` (ACE-Step) | ⚠️ **queues, doesn't finish** | Accepted and queued; no result after 300 s. |
+| `/v1/music/generate` (ACE-Step) | ❌ **queues, never delivers** | Retested warm; queue is not drained. Replaced by Stable Audio — see below. |
 
 ## The call that matters
 
@@ -132,15 +132,43 @@ Two traps when polling:
    `"Audio file not found on any instance"` (pending/dropped) vs
    `"Unknown music endpoint"` (wrong route).
 
-### Action
+### Retested 2026-07-29 (later) — still does not deliver
 
-Ambience is **not** on the week-4 critical path. Options, cheapest first:
+`/v1/music/` now reports `models_initialized: true` (it was `false`, which
+explained the first round of failures). It made no difference:
 
-1. Queue a job and collect it much later — plausibly just a slow cold start.
-2. Ask in `#iio-games` whether ACE-Step is expected to be warm. Others have
-   shipped with it, so someone knows.
-3. Build the bed from Stable Audio layers, which works today: a long low drone
-   plus room tone, looped via `/v1/audio/loop-points`.
+- A fresh job sat at `queue_position: 1` for **300 s** with no result.
+- All three jobs from the earlier session are gone — `download` returns
+  "Audio file not found on any instance" for every one.
+- `/v1/music/download/<task_id>` is the **only** valid retrieval route. Ten other
+  candidate paths (`/status/`, `/result/`, `/task/`, `/audio/`, `/jobs`, `/list`,
+  `.wav`, `.mp3` suffixes…) all 404 with "Unknown music endpoint".
+
+Conclusion: the model loads but **the queue is not being drained**. That is
+service-side and not fixable from here.
+
+**Worth raising in `#iio-games`** — ACE-Step is named in Divine Ascendancy's
+asset pipeline, so somebody there has got audio out of it and will know whether a
+worker needs kicking.
+
+### What shipped
+
+Stable Audio 3.0, via `tools/gen_ambience.py`. Two seamless loops (a diegetic
+room-tone bed and a tension drone whose gain tracks ink's `pressure`) plus two UI
+one-shots. 377 KB total.
+
+Two things that pass silently if you don't measure them:
+
+- **Do not ask the model for "very quiet".** The first bed came back at
+  −56 dBFS — effectively silence. Level is the mixer's job; the prompt should
+  describe the *sound*. Everything is `loudnorm`-ed at build time so the mixer's
+  gains mean something.
+- **Generated clips do not loop.** They are wrapped locally: take the clip from
+  `xfade` onward and crossfade its tail into the clip's own opening, so the
+  result starts and ends on the same material. Measured wrap discontinuity is
+  0.004–0.006, i.e. no click. Note `acrossfade` yields an **empty stream** when
+  fed `atrim`'d branches of an `asplit` — it needs plain file inputs, so this
+  runs as three passes with intermediates.
 
 ## Still open
 

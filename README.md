@@ -31,7 +31,9 @@ npm run dev      # http://localhost:4180 — compiles the story first
 | `npm run gate` | Compile → structural lint → scripted playthrough. Green before any Slack post. |
 | `npm run playtest` | Just the playthrough: asserts the route to ending A still works |
 | `npm run build` | Gate → typecheck → production build |
-| `uv run --script tools/smoke_audio.py` | Probe the Rupert audio endpoints |
+| `uv run --script tools/gen_art.py` | Generate + grade portraits and evidence stills |
+| `uv run --script tools/gen_voice.py` | Generate the voice notes |
+| `uv run --script tools/gen_ambience.py` | Generate ambience beds and SFX |
 
 ## Layout
 
@@ -41,7 +43,7 @@ src/        React app — chat shell, evidence drawer
   lib/ink.ts    the only place tags are parsed
   state/game.ts playout timing, save/load
 design/     survivor-bias-tokens.json (style lock) + mocks
-tools/      build_story · lint_story · smoke_audio
+tools/      build_story · lint_story · playtest · gen_art · gen_voice · gen_ambience
 docs/       AUDIO_FINDINGS.md and friends
 ```
 
@@ -53,7 +55,7 @@ attribution by one. The gate fails the build if you do it.
 
 ```ink
 oh god it's really you # from: t3 # delay: 1100
-that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_01.png
+that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_01.webp
 ~ gain(C_CAR_KEYS, "You still had Nell's car keys the next morning.", "t3")
 ```
 
@@ -149,21 +151,41 @@ worn into different shapes.
 Waveforms in the UI are the **real peak envelope** of each file, generated alongside the
 audio into `src/voices.json`.
 
+## Ambience
+
+`uv run --script tools/gen_ambience.py`. Two seamless loops and two one-shots, 377 KB.
+
+| | What it is |
+|---|---|
+| **bed** | Cold room tone. Diegetic — his bedroom at one in the morning. Constant and quiet. |
+| **tension** | A dissonant drone. Score, not room. **Its gain rises with ink's `pressure` counter**, so the night closing in is audible as well as written — a third channel for the felt deadline, still with no numbers on screen. |
+| **sfx** | Message receive / send. Throttled so close beats can't double-blip. |
+
+Sound starts on the first tap (browsers block it before that) and there's a persistent
+mute toggle on the home screen — ambient audio in a text game needs to be one tap from
+off. Built with `HTMLAudioElement`, not WebAudio: two loops and two blips don't justify a
+gain graph.
+
+ACE-Step was the planned generator and never delivered — it queues jobs and doesn't drain
+them, retested warm. Stable Audio does the job. Both traps worth knowing are in
+`docs/AUDIO_FINDINGS.md`: don't prompt for "quiet" (the first bed came back at −56 dBFS),
+and generated clips must be crossfade-wrapped to loop.
+
 ## Status
 
-Week 4 of a 4–6 week vertical slice. **Content-complete**: all three selves, the full
-cross-examination web, all three endings, portraits, evidence stills and voice notes.
+Week 5 of a 4–6 week vertical slice. **Feature-complete**: all three selves, the full
+cross-examination web, all three endings, the convergence screen, portraits, evidence
+stills, voice notes and ambience.
 
 ```
 story gate: claims 9/9 obtainable · 4/9 contestable · 0 orphan
             673 paths walked · 27 quote pairs · 8/8 entries terminate
 playtest:   PASS — 5 scenarios, all 3 endings verified
 art gates:  LPIPS 3/3 in band · NIMA 8/8 above floor
-payload:    104 KB js + 400 KB art + 116 KB voice
+payload:    108 KB js + 400 KB art + 116 KB voice + 377 KB ambience
 ```
 
-Remaining: ambience (ACE-Step queues but hasn't returned audio — see
-`docs/AUDIO_FINDINGS.md`), a restart affordance, and a pacing pass with real eyes.
+Remaining: a restart affordance, and a pacing pass with real eyes and ears.
 
 Known limitation: the save is written at the end of each beat, so reloading *during* the
 endgame sequence drops back to the ending choice rather than resuming mid-sequence.

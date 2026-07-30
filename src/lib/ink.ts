@@ -168,6 +168,16 @@ export class StoryEngine {
     }
   }
 
+  /**
+   * The ink `pressure` counter — how many substantive things the player has
+   * done. Drives the ambience tension layer, so the night closing in is audible
+   * as well as written. See endings.ink → tick().
+   */
+  pressure(): number {
+    const v = this.story.variablesState['pressure'];
+    return typeof v === 'number' ? v : 0;
+  }
+
   save(): string {
     return this.story.state.ToJson();
   }
