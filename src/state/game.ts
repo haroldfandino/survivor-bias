@@ -20,6 +20,11 @@ interface GameState {
   evidenceOpen: boolean;
   /** Claim the player has armed to quote, if any. */
   armed: string | null;
+  /**
+   * Full-screen sequence currently taking over, if any. While this is set the
+   * message queue is parked — the moment owns its own pacing.
+   */
+  screen: string | null;
 
   boot: () => void;
   openContact: (id: Sender) => void;
@@ -28,6 +33,8 @@ interface GameState {
   arm: (claimId: string | null) => void;
   quoteArmed: (target: Sender) => void;
   toggleEvidence: () => void;
+  /** Called by the overlay when its sequence is done (or skipped). */
+  dismissScreen: () => void;
   reset: () => void;
 }
 
@@ -36,6 +43,9 @@ const MAX_DELAY = 2600;
 
 /** Guards against StrictMode's double effect invocation. */
 let booted = false;
+
+/** Resolver for the parked message queue while a full-screen sequence runs. */
+let screenGate: (() => void) | null = null;
 
 export const useGame = create<GameState>((set, get) => {
   /**
@@ -73,6 +83,17 @@ export const useGame = create<GameState>((set, get) => {
     }
 
     for (const msg of beat.messages) {
+      // A screen beat parks the queue and hands the moment over entirely. The
+      // overlay resolves the gate when it finishes or the player skips it.
+      if (msg.screen) {
+        await sleep(Math.min(msg.delay, MAX_DELAY));
+        set({ typing: null, screen: msg.screen });
+        await new Promise<void>((resolve) => {
+          screenGate = resolve;
+        });
+        if (!msg.text) continue;
+      }
+
       if (msg.from !== 'you' && msg.from !== 'system') {
         set({ typing: msg.from });
         await sleep(Math.min(msg.delay, MAX_DELAY));
@@ -116,6 +137,7 @@ export const useGame = create<GameState>((set, get) => {
     unread: {},
     evidenceOpen: false,
     armed: null,
+    screen: null,
 
     boot() {
       // React StrictMode mounts effects twice in dev; without this the boot
@@ -197,9 +219,21 @@ export const useGame = create<GameState>((set, get) => {
       set((s) => ({ evidenceOpen: !s.evidenceOpen }));
     },
 
+    dismissScreen() {
+      if (!get().screen) return;
+      set({ screen: null });
+      const release = screenGate;
+      screenGate = null;
+      release?.();
+    },
+
     reset() {
       localStorage.removeItem(SAVE_KEY);
       booted = false;
+      // Release any parked queue, otherwise resetting mid-sequence leaves the
+      // old playout awaiting a gate that nothing will ever resolve.
+      screenGate?.();
+      screenGate = null;
       set({
         engine: new StoryEngine(),
         threads: {},
@@ -210,6 +244,7 @@ export const useGame = create<GameState>((set, get) => {
         unread: {},
         evidenceOpen: false,
         armed: null,
+        screen: null,
       });
       get().boot();
     },

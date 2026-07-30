@@ -13,6 +13,7 @@ import type { Claim, Message, Sender } from './types';
  *   delay: 900                  ms of typing indicator before the bubble lands
  *   voice: <id>                 render as a voice note
  *   img: <path>                 photo attachment, relative to assets/
+ *   screen: convergence         hand the beat to a full-screen sequence
  *   gain: <id> :: <text> :: <who>   file a claim (side-effect, not a bubble)
  *   contest: <id>               mark a claim contested (side-effect)
  */
@@ -34,6 +35,7 @@ function parseTags(tags: string[]) {
     delay?: number;
     voice?: string;
     img?: string;
+    screen?: string;
     gains: Claim[];
     contests: string[];
   } = { gains: [], contests: [] };
@@ -58,6 +60,9 @@ function parseTags(tags: string[]) {
         break;
       case 'img':
         out.img = value;
+        break;
+      case 'screen':
+        out.screen = value;
         break;
       case 'gain': {
         const [id, text, who] = value.split('::').map((s) => s.trim());
@@ -112,7 +117,11 @@ export class StoryEngine {
       gained.push(...t.gains);
       contested.push(...t.contests);
 
-      if (!text) continue;
+      // A `screen:` beat is authored as a bare gather with tags only, so it has
+      // no text. It still has to survive as a positioned entry in the sequence,
+      // because the screen must fire between the lines it sits between — hence a
+      // control message with empty text, which the renderer skips.
+      if (!text && !t.screen) continue;
 
       messages.push({
         id: nextId(),
@@ -121,6 +130,7 @@ export class StoryEngine {
         delay: t.delay ?? DEFAULT_DELAY,
         voice: t.voice,
         img: t.img,
+        screen: t.screen,
       });
     }
 

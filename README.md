@@ -63,6 +63,7 @@ that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_0
 | `delay: 900` | ms of typing indicator before the bubble lands |
 | `voice: <id>` | render as a voice note |
 | `img: <path>` | photo attachment, relative to `assets/` |
+| `screen: convergence` | hand the beat to a full-screen sequence; parks the queue until done |
 | `gain(id, text, who)` | file a claim (a function, not a tag) |
 | `contest(id)` | mark a claim contested |
 
@@ -88,7 +89,9 @@ T-12 sends **no voice notes**, and the absence is a clue.
 Three endings, all reached by **choosing** — never by timing out. `TONIGHT` sits in the
 contact list from the first screen and refuses to open until you have a reason to act.
 
-- **A — Prevented.** You go nowhere. You sit still and pick up.
+- **A — Prevented.** You go nowhere. You sit still and pick up. Hands off to the
+  **convergence screen**: four lives from one trunk, a rule at 01:38, and the call marker
+  filled on exactly one of them — then the other three go dark, one at a time.
 - **B — Substituted.** You act, decisively, on the best-argued thing you were told.
 - **C — Refused.** You put the phone down. No reproach, no score.
 
@@ -159,7 +162,11 @@ art gates:  LPIPS 3/3 in band · NIMA 8/8 above floor
 payload:    104 KB js + 400 KB art + 116 KB voice
 ```
 
-Remaining: the convergence screen for ending A's branch shutdown, ambience (ACE-Step
-queues but hasn't returned audio — see `docs/AUDIO_FINDINGS.md`), and restart/polish.
+Remaining: ambience (ACE-Step queues but hasn't returned audio — see
+`docs/AUDIO_FINDINGS.md`), a restart affordance, and a pacing pass with real eyes.
+
+Known limitation: the save is written at the end of each beat, so reloading *during* the
+endgame sequence drops back to the ending choice rather than resuming mid-sequence.
+Consistent, not broken, but it wants the restart work anyway.
 
 See `story/BIBLE.md` for the design, `docs/AUDIO_FINDINGS.md` for the audio contracts.

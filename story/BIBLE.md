@@ -102,7 +102,7 @@ about it to keep you away from it.
 
 | # | Trigger | Shape |
 |---|---|---|
-| **A — Prevented** | Extract T-7's gap *and* discredit ≥2 of T-12's false claims | You act on the small true thing. Nell lives. The other three go quiet — you can see them stop being reachable, one at a time. |
+| **A — Prevented** | Extract T-7's gap *and* discredit ≥2 of T-12's false claims | You act on the small true thing. Nell lives. Hands off to the **convergence screen**, where you watch the other three stop being reachable, one at a time. |
 | **B — Substituted** | Act on a T-12 claim you never contested | You intervene on the wrong detail. She dies differently. The selves are *relieved*, and that's the horror. |
 | **C — Refused** | Choose to put the phone down | You let it ring. Ambiguous whether you couldn't or wouldn't. T-3's last message: *"i didn't pick up either. none of us did. that's the whole thing."* |
 
@@ -123,6 +123,24 @@ the gate, T-12 was asleep three hundred miles away.
 on it talking to them.** The thing that saves her is that you answer. The app is the mechanism.
 That is why the divergence is small, why nobody ever agreed on what it was, and why the player
 had to be on their phone for the whole game.
+
+### The convergence screen
+
+Ending A's climax is a full-screen diagram, not chat text (`src/components/Convergence.tsx`,
+triggered by `# screen: convergence`, which parks the message queue until it finishes).
+
+Four lives leave one trunk and fan out. A rule crosses all of them at **01:38** — the only
+labelled time on the diagram. Every line carries a marker at that moment, and on exactly
+one it is **filled**.
+
+> The difference between four lives is one answered call.
+
+Then the three that didn't answer go out, staggered, their labels turning to `NO SIGNAL`,
+until only the lit line is left. It replaced three lines of chat text that said the same
+thing and carried none of it.
+
+Skippable from the first frame, and it jumps to the end state under
+`prefers-reduced-motion` — the information matters more than the choreography.
 
 ### The deadline is felt, not shown
 

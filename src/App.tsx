@@ -3,6 +3,7 @@ import { useGame } from './state/game';
 import { ContactList } from './components/ContactList';
 import { ChatView } from './components/ChatView';
 import { EvidenceDrawer } from './components/EvidenceDrawer';
+import { Convergence } from './components/Convergence';
 
 /**
  * The device frame.
@@ -11,7 +12,7 @@ import { EvidenceDrawer } from './components/EvidenceDrawer';
  * desktop monitor — on a phone it fills the screen and the frame disappears.
  */
 export default function App() {
-  const { boot, openThread, claims, toggleEvidence, evidenceOpen } = useGame();
+  const { boot, openThread, claims, toggleEvidence, evidenceOpen, screen } = useGame();
 
   useEffect(() => {
     // Deliberately once, on mount. boot() no-ops onto a save if one exists.
@@ -29,11 +30,13 @@ export default function App() {
         <main className="relative flex-1 overflow-hidden">
           {openThread ? <ChatView id={openThread} /> : <ContactList />}
           <EvidenceDrawer />
+          {screen === 'convergence' && <Convergence />}
         </main>
 
         {/* Evidence is always one tap away — the loop depends on the player
-            being able to check a claim mid-conversation. */}
-        {!evidenceOpen && (
+            being able to check a claim mid-conversation. Hidden during a
+            full-screen sequence: the moment takes the whole frame. */}
+        {!evidenceOpen && !screen && (
           <button
             onClick={toggleEvidence}
             className="flex items-center justify-between border-t border-hairline bg-raised px-4 py-3 text-left transition-colors hover:bg-input"

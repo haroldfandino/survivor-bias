@@ -30,12 +30,15 @@ function run(name, body) {
   const claims = new Map();
   const log = [];
   const problems = [];
+  const screens = [];
   let transcript = '';
 
   function drain() {
     while (story.canContinue) {
       const text = story.Continue().trim();
       for (const tag of story.currentTags ?? []) {
+        const sc = /^screen:\s*(\S+)\s*$/.exec(tag);
+        if (sc) screens.push(sc[1]);
         const g = /^gain:\s*(C_[A-Z0-9_]+)\s*::\s*(.+?)\s*::\s*(\S+)\s*$/.exec(tag);
         if (g && !claims.has(g[1])) {
           claims.set(g[1], { text: g[2], source: g[3], contested: false });
@@ -96,6 +99,8 @@ function run(name, body) {
     contested(id) {
       return !!claims.get(id)?.contested;
     },
+    /** Full-screen sequences this run handed off to, in order. */
+    screens: () => [...screens],
   };
 
   body(api);
@@ -189,7 +194,7 @@ run('ENDING A — prevented (the full route)', (t) => {
   t.expect('she calls at 01:38', t.said('01:38'));
   t.expect('he answers', t.said('You answer on the second ring.'));
   t.expect('the keys pay off', t.said('in this timeline you have them'));
-  t.expect('the branches go quiet', t.said('TIMELINE-7 — no signal'));
+  t.expect('hands off to the convergence screen', t.screens().includes('convergence'));
   t.expect('the title lands', t.said('Somebody picked up.'));
   t.expect('story is over', t.ended());
 
@@ -213,6 +218,8 @@ run('ENDING B — substituted (acts on an uncontested lie)', (t) => {
   t.expect('it rings unanswered', t.said('It rings at 01:38 for forty seconds.'));
   t.expect('the horror is the relief', t.said('now you understand'));
   t.expect('T-12 is kind about it', t.said('He was trying to bring you home.'));
+  // The convergence screen belongs to ending A alone. Nothing converges here.
+  t.expect('no convergence screen', !t.screens().includes('convergence'));
   t.expect('story is over', t.ended());
 });
 
@@ -226,6 +233,7 @@ run('ENDING C — refused (reads as a choice, not a failure)', (t) => {
   t.expect('no reproach, only ambiguity', t.said('whether that was a decision'));
   t.expect('T-3 gets the last word', t.said("i didn't pick up either"));
   t.expect('shared, not blamed', t.said("that's all any of us are"));
+  t.expect('no convergence screen', !t.screens().includes('convergence'));
   t.expect('story is over', t.ended());
 });
 

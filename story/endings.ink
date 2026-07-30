@@ -137,11 +137,14 @@ hey — did i wake you? # from: nell # delay: 2200 # voice: nell_call_01
 You say yes. # from: system # delay: 2400
 You are already looking for your keys, because in this timeline you have them. # from: system # delay: 2600
 
-// The other branches stop existing. This is the moment the title lands.
-- - - # from: system # delay: 3000
-TIMELINE-3 — no signal # from: system # delay: 2400
-TIMELINE-7 — no signal # from: system # delay: 2000
-TIMELINE-12 — no signal # from: system # delay: 2000
+// The other branches stop existing.
+//
+// `# screen: convergence` hands the moment to a full-screen visual and PAUSES
+// the message queue until it finishes — see src/components/Convergence.tsx. It
+// replaces what used to be three "TIMELINE-N — no signal" chat lines, because
+// watching them go out one at a time is the whole point and a text list cannot
+// carry it. The coda below lands back in the chat afterwards.
+- # from: system # delay: 2000 # screen: convergence
 
 They were only ever reachable because they were the ones who lost her. # from: system # delay: 3000
 Forty seconds. That's all the difference ever was. # from: system # delay: 2800

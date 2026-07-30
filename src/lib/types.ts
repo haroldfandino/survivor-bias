@@ -14,6 +14,11 @@ export interface Message {
   voice?: string;
   /** Photo attachment path, relative to assets/. */
   img?: string;
+  /**
+   * Hands this beat to a full-screen sequence, pausing the message queue until
+   * it completes. Currently only 'convergence' (ending A).
+   */
+  screen?: string;
 }
 
 /** One checkable assertion about that night. */
