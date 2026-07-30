@@ -36,6 +36,7 @@ npm run dev      # http://localhost:4180 — compiles the story first
 | `uv run --script tools/gen_ambience.py` | Generate ambience beds and SFX |
 | `npm run pacing` | Dead-air audit per beat (part of `gate`) |
 | `uv run --script tools/a11y.py` | WCAG contrast + colour-blind separation |
+| `uv run --script tools/build_kit.py` | Build `marketing/kit.html` (self-contained review kit) |
 
 ## Layout
 
@@ -46,7 +47,8 @@ src/        React app — chat shell, evidence drawer
   state/game.ts playout timing, save/load
 design/     survivor-bias-tokens.json (style lock) + mocks
 tools/      build_story · lint_story · playtest · pacing · a11y
-            gen_art · gen_voice · gen_ambience
+            gen_art · gen_voice · gen_ambience · build_kit
+marketing/  POST-DRAFT.md (unsent Slack draft) · kit.html
 docs/       AUDIO_FINDINGS.md and friends
 ```
 
@@ -229,8 +231,19 @@ carries undelivered messages, so reloading mid-beat no longer silently loses lin
 advances the moment a beat is read, but the messages land one at a time over several
 seconds, and the old save only recorded the delivered ones.
 
-Remaining before a kickoff post: a real playthrough with eyes and ears. Everything is
-verified structurally, and pacing is now measured rather than guessed — but the mix of
-typing rhythm, voice notes, cutscene and drone has never been *heard* together.
+## Presenting it
+
+`marketing/POST-DRAFT.md` holds an unsent `#iio-games` kickoff post in house format, plus a
+short dev-update follow-up, plus the three decisions that need making first (bot name,
+what to attach, timing). **Nothing has been sent** — the channel norm is draft-first.
+
+`marketing/kit.html` is a 584 KB self-contained review kit: real portraits and evidence
+stills, the six voice notes playable inline, and the convergence diagram. Everything in it
+is a shipped asset — the chat UI in motion isn't shown, and isn't faked either.
+
+Remaining before posting: a real playthrough with eyes and ears, and 4–5 screenshots taken
+while doing it. Everything is verified structurally and pacing is measured rather than
+guessed, but the mix of typing rhythm, voice notes, cutscene and drone has never been
+*heard* together.
 
 See `story/BIBLE.md` for the design, `docs/AUDIO_FINDINGS.md` for the audio contracts.
