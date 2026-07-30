@@ -11,8 +11,12 @@
 //
 //   # from: t3      who sent it (omit for the player)
 //   # delay: 900    ms to hold the typing indicator before this lands
-//   # voice: <id>   render as a voice note
 //   # img: <path>   render as a photo attachment
+//
+// `# voice: <id>` also exists and still works end to end — the assets, the
+// generator (tools/gen_voice.py) and the player component are all in place. It
+// is deliberately unused for now: the voice notes weren't earning their place,
+// so those lines are plain text and re-enabling one is a single tag.
 // ===========================================================================
 
 === t3_open ===
@@ -96,7 +100,7 @@ that's from the week after # from: t3 # delay: 1100 # img: evidence/ford_night_0
 ~ gain(C_WHO_ARGUED, "Nell argued with someone on the porch before she left.", "t3")
 there was someone on the porch with her # from: t3 # delay: 1000
 i saw them from the car. i was in the car. i was # from: t3 # delay: 1200 # img: evidence/porch_night.webp
-i wasn't in a state to go and see who it was # from: t3 # delay: 1400 # voice: t3_porch_01
+i wasn't in a state to go and see who it was # from: t3 # delay: 1400
 ~ tick()
 -> t3_hub
 
@@ -109,7 +113,7 @@ hang on # from: t3 # delay: 1600
 hang on. you're not asking about me are you # from: t3 # delay: 1300
 ~ contest(C_TIME_GAP)
 there was someone coming back up from the water # from: t3 # delay: 1800
-i thought it was one of the lads. i've thought it was one of the lads for twenty years # from: t3 # delay: 2000 # voice: t3_gap_01
+i thought it was one of the lads. i've thought it was one of the lads for twenty years # from: t3 # delay: 2000
 ~ tick()
 -> t3_hub
 
@@ -122,7 +126,7 @@ i thought it was one of the lads. i've thought it was one of the lads for twenty
         who told you the car moved # from: t3 # delay: 900
         ~ contest(C_CAR_MOVED)
         that's wrong. i had the keys. i HAD them # from: t3 # delay: 1200
-        i've still got them. twenty years. they're in a drawer # from: t3 # delay: 1900 # voice: t3_keys_01
+        i've still got them. twenty years. they're in a drawer # from: t3 # delay: 1900
 
     - quoting == "C_FORD_LIGHT":
         the light wasn't out # from: t3 # delay: 800

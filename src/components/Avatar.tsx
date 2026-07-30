@@ -42,6 +42,20 @@ export function Avatar({ id, size = 40 }: { id: Sender; size?: number }) {
           className="h-full w-full object-cover"
           onError={() => setFailed(true)}
         />
+      ) : id === 'prime' ? (
+        /* The player's own timeline gets the game's central motif rather than a
+           glyph: a filled marker, the same thing that means "answered" on the
+           convergence diagram. A `·` character was near-invisible at 40px and
+           read as a broken image rather than a deliberate absence. */
+        <span
+          className="block rounded-full"
+          style={{
+            width: size * 0.3,
+            height: size * 0.3,
+            background: tint,
+            boxShadow: `0 0 ${size * 0.28}px ${tint}`,
+          }}
+        />
       ) : (
         <span
           className="font-mono tracking-tight"

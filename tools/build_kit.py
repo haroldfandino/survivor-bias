@@ -10,10 +10,8 @@ so it can be dropped in Drive or opened from a Slack link with nothing else need
 Themed to this game's own style lock rather than DA's gold-on-obsidian.
 
 Everything in the kit is a REAL shipped asset — the portraits and stills are the
-files the game loads, the voice notes are the real mp3s, and the convergence
-diagram is the same SVG markup the game renders. Nothing here is a mockup, and
-the one thing the kit cannot show (the chat UI in motion) is called out as such
-rather than faked.
+files the game loads, the screenshots are captured from the running app, and the
+convergence diagram is the same SVG markup the game renders. Nothing is a mockup.
 
 Usage: uv run --script tools/build_kit.py
 """
@@ -27,7 +25,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "marketing" / "kit.html"
 TOKENS = json.loads((ROOT / "design" / "survivor-bias-tokens.json").read_text(encoding="utf-8"))
-VOICES = json.loads((ROOT / "src" / "voices.json").read_text(encoding="utf-8"))
 
 
 def data_uri(path: Path, mime: str) -> str:
@@ -38,10 +35,6 @@ def img(name: str, folder: str) -> str:
     return data_uri(ROOT / "public" / folder / f"{name}.webp", "image/webp")
 
 
-def audio(name: str) -> str:
-    return data_uri(ROOT / "public" / "audio" / f"{name}.mp3", "audio/mpeg")
-
-
 C = TOKENS["chrome"]
 T = TOKENS["timelines"]
 
@@ -49,15 +42,15 @@ SELVES = [
     ("t3", "TIMELINE-3", "the one who stayed",
      "Never left town. Drinks. Was in the car. Talks the most and is the least reliable — "
      "he gives you the emotional truth and a lot of factual noise.",
-     "close-mic, room reverb, slower &middot; 92-96 Hz"),
+     "register: lowercase, run-on, self-interrupting"),
     ("t7", "TIMELINE-7", "the one who atoned",
      "Became a paramedic because of it. Precise, calm, easiest to trust. He has the most "
      "accurate account of that night and he is the one actually at fault. He does not lie. He omits.",
-     "flat, compressed, no room &middot; 100-101 Hz"),
+     "register: complete sentences, timestamps, never swears"),
     ("t12", "TIMELINE-12", "the one who got out",
      "Moved away and built a life on top of it. The best-argued claims in the game are his, "
      "and three of them are false. He does not want you to succeed.",
-     "no voice notes at all &mdash; the silence is a clue"),
+     "register: clipped, edited, no typos &mdash; ever"),
 ]
 
 EVIDENCE = [
@@ -97,7 +90,7 @@ def selves_html() -> str:
           <div class="label" style="color:{tint}">{label}</div>
           <div class="blurb">{blurb}</div>
           <p>{desc}</p>
-          <div class="voice-note">{voice}</div>
+          <div class="register">{voice}</div>
         </div>
       </article>""")
     return "".join(out)
@@ -112,24 +105,6 @@ def evidence_html() -> str:
         <figcaption><strong>{title}</strong> {desc}</figcaption>
       </figure>""")
     return "".join(out)
-
-
-def voices_html() -> str:
-    rows = []
-    for vid, meta in VOICES.items():
-        branch = meta["branch"]
-        tint = T[branch]["key"] if branch in T else "#F2D9B0"
-        who = "NELL" if branch == "nell" else T[branch]["label"]
-        text = meta["text"]
-        if branch == "nell":
-            text = "&mdash; held back until an ending &mdash;"
-        rows.append(f"""
-        <div class="vrow reveal">
-          <span class="vwho" style="color:{tint}">{who}</span>
-          <audio controls preload="none" src="{audio(vid)}"></audio>
-          <span class="vtext">{text}</span>
-        </div>""")
-    return "".join(rows)
 
 
 def convergence_svg() -> str:
@@ -224,7 +199,7 @@ HTML = f"""<!DOCTYPE html>
   .blurb{{font-family:ui-monospace,monospace; font-size:.625rem; letter-spacing:.14em;
     text-transform:uppercase; color:var(--faint); margin:.3em 0 .7em}}
   .self p{{color:var(--dim); font-size:.9375rem}}
-  .voice-note{{margin-top:10px; font-family:ui-monospace,monospace; font-size:.625rem;
+  .register{{margin-top:10px; font-family:ui-monospace,monospace; font-size:.625rem;
     letter-spacing:.1em; text-transform:uppercase; color:var(--faint)}}
 
   figure{{margin-bottom:34px}}
@@ -321,16 +296,6 @@ HTML = f"""<!DOCTYPE html>
 </section>
 
 <section class="wrap">
-  <div class="kicker">voice</div>
-  <h2>Hear the same man three ways</h2>
-  <p style="color:var(--dim); max-width:640px; margin:14px 0 24px">
-    Play them back to back. It's one voice base; the rooms are different.
-    T-12 has none, and that absence is a clue rather than an omission.
-  </p>
-  {voices_html()}
-</section>
-
-<section class="wrap">
   <div class="kicker">ending a</div>
   <h2>The difference between four lives is one answered call</h2>
   <p style="color:var(--dim); max-width:640px; margin:14px 0 24px">
@@ -355,8 +320,9 @@ HTML = f"""<!DOCTYPE html>
       <li><strong>Nobody has played it at true speed yet.</strong> Pacing is measured, not felt
         &mdash; the mix of typing rhythm, voice notes, cutscene and drone has never been heard
         together. That's the next thing.</li>
-      <li><strong>No in-app screenshots in this kit.</strong> Everything above is a real
-        shipped asset, but the chat UI in motion isn't shown, so it isn't faked either.</li>
+      <li><strong>Voice notes are parked.</strong> Six were generated &mdash; one voice base,
+        a different room per branch &mdash; and they didn't earn their place, so every line is
+        text for now. The pipeline is still there if we want to revisit it.</li>
       <li><strong>Faces drift between portraits by design.</strong> No ControlNet or character
         LoRA locally, so the art direction routes around it instead of pretending otherwise.</li>
       <li><strong>ACE-Step never delivered.</strong> It queues jobs and doesn't drain them, warm

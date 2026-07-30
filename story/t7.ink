@@ -84,7 +84,7 @@ Make of that what you like. I've made everything of it I can. # from: t7 # delay
 Twenty-two years next March. # from: t7 # delay: 700
 People assume that's penance. It isn't. Penance implies it helps. # from: t7 # delay: 1200
 It's just that I know exactly how long fifteen minutes is now. To the second. In a way I didn't then. # from: t7 # delay: 1450
-I know what can be undone inside fifteen minutes and I know what can't. # from: t7 # delay: 1300 # voice: t7_job_01
+I know what can be undone inside fifteen minutes and I know what can't. # from: t7 # delay: 1300
 ~ tick()
 -> t7_hub
 
@@ -114,7 +114,7 @@ Here is what I'll give you, and it's more than I've given anyone. # from: t7 # d
 At 01:40 she came off that porch and she said something to me. # from: t7 # delay: 1400
 And at 01:55 I was at the gate, and I was on my own. # from: t7 # delay: 1300
 You can do the arithmetic. I've done it every night for twenty-two years and it comes out the same way every time. # from: t7 # delay: 1550
-Don't ask me to say it. You're the only one who can still not need me to. # from: t7 # delay: 1450 # voice: t7_gap_01
+Don't ask me to say it. You're the only one who can still not need me to. # from: t7 # delay: 1450
 ~ tick()
 -> t7_hub
 

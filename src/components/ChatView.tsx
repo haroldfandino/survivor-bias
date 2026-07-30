@@ -9,12 +9,47 @@ export function ChatView({ id }: { id: Sender }) {
   const { threads, typing, choices, choose, closeThread } = useGame();
   const messages = threads[id] ?? [];
   const contact = CONTACTS_BY_ID[id];
-  const bottom = useRef<HTMLDivElement>(null);
+  const scroller = useRef<HTMLDivElement>(null);
 
-  // Keep the newest message in view as bubbles land and choices appear.
+  /**
+   * Keep the newest message in view as bubbles land and choices appear.
+   *
+   * Scrolls the container to its own maximum rather than calling
+   * scrollIntoView on a sentinel: when the choice panel grows from one option to
+   * four, the scroll area shrinks in the same frame, and scrollIntoView resolved
+   * against the pre-shrink layout — leaving the last two bubbles clipped below
+   * the fold. Two rAFs, so it runs after layout has actually settled.
+   */
   useEffect(() => {
-    bottom.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        const el = scroller.current;
+        if (el) el.scrollTop = el.scrollHeight;
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
   }, [messages.length, typing, choices.length]);
+
+  /**
+   * Re-scroll once an attachment has actually decoded.
+   *
+   * An evidence image arrives with no intrinsic height, so the scroll above runs
+   * against a layout that is still short and the photo ends up half below the
+   * fold. `load` doesn't bubble, hence the capture-phase listener.
+   */
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const onLoad = () => {
+      el.scrollTop = el.scrollHeight;
+    };
+    el.addEventListener('load', onLoad, true);
+    return () => el.removeEventListener('load', onLoad, true);
+  }, []);
 
   return (
     <div className="flex h-full flex-col">
@@ -42,12 +77,19 @@ export function ChatView({ id }: { id: Sender }) {
         </div>
       </header>
 
-      <div className="scroll-quiet flex flex-1 flex-col gap-1.5 overflow-y-auto px-3 py-4">
-        {messages.map((m) => (
-          <MessageBubble key={m.id} msg={m} />
-        ))}
-        {typing === id && <TypingIndicator tint={contact?.tint ?? '#888'} />}
-        <div ref={bottom} />
+      {/* Bottom-anchored. A short conversation must sit just above the composer
+          and grow upward, the way every messaging app does — with the content
+          top-aligned instead, the first few bubbles float in a void and the
+          whole screen reads as a layout bug. `mt-auto` on an inner wrapper
+          rather than `justify-end` on the scroller, because justify-end clips
+          the top of overflowing content. */}
+      <div ref={scroller} className="scroll-quiet flex flex-1 flex-col overflow-y-auto px-3 py-4">
+        <div className="mt-auto flex flex-col gap-1.5">
+          {messages.map((m) => (
+            <MessageBubble key={m.id} msg={m} />
+          ))}
+          {typing === id && <TypingIndicator tint={contact?.tint ?? '#888'} />}
+        </div>
       </div>
 
       <footer className="border-t border-hairline p-3">

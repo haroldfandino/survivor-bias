@@ -131,10 +131,14 @@ NELL # from: system # delay: 1400 # img: evidence/nell.webp
     * [Answer it.]
 
 - You answer on the second ring. # from: system # delay: 2000
-// Her only voice note in the game, and the only time she speaks at all.
-// Phone-band treated in tools/gen_voice.py, because she IS on a phone.
-hey — did i wake you? # from: nell # delay: 2200 # voice: nell_call_01
-You say yes. # from: system # delay: 2400
+// The only time she speaks in the entire game. Short bubbles on purpose: she is
+// standing on a road in the dark being casual about it.
+hey — did i wake you? # from: nell # delay: 1100
+i'm fine, i'm fine. i just # from: nell # delay: 850
+it's further than i thought # from: nell # delay: 950
+and there's no light down by the water # from: nell # delay: 1000
+can you come and get me # from: nell # delay: 1100
+You say yes. # from: system # delay: 2000
 You are already looking for your keys, because in this timeline you have them. # from: system # delay: 2600
 
 // The other branches stop existing.
