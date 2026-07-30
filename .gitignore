@@ -29,5 +29,8 @@ src/story.json
 # audio probe output
 assets/audio/_smoke/
 
-# ungraded flux output, cached for re-grading without re-generating
+# Intermediate generation artifacts. All reproducible from tools/gen_*.py, and
+# ~11MB of raw WAV has no business in the repo — public/ holds what ships.
 assets/_raw/
+assets/**/_raw/
+assets/**/_probe/
