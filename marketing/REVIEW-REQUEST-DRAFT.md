@@ -3,8 +3,12 @@
 Channel `C0AQGAYBE7Q`. A focused critique request, separate from the kickoff post in
 `POST-DRAFT.md`. Post this one *first* if you want a read before going wide.
 
-**This is live as a Slack draft** in #iio-games, sitting in Drafts & Sent — updated to carry
-the deployed link. Not sent. Edit it there and hit send when you're happy, or delete it.
+**This is live as a Slack draft** — `Dr0BLU70AA4B` in #iio-games, in Drafts & Sent. It carries
+the deployed link. Not sent. Edit it there and hit send when you're happy.
+
+Note on the connector: `slack_send_message_draft` returns a `draft_id` when it creates a draft
+and omits it when it updates an existing one. Only one attached draft per channel is allowed,
+so a "success with no id" means it overwrote rather than duplicated.
 
 ## On the byline
 
