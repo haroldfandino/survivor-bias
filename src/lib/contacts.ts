@@ -44,7 +44,7 @@ export const CONTACTS: Contact[] = [
     id: 'prime',
     label: 'TONIGHT',
     blurb: 'your timeline',
-    tint: 'var(--color-accent)',
+    tint: 'var(--color-accent-text)',
     entry: 'endgame',
     quoteEntry: 'endgame',
     reachable: true,

@@ -34,6 +34,8 @@ npm run dev      # http://localhost:4180 — compiles the story first
 | `uv run --script tools/gen_art.py` | Generate + grade portraits and evidence stills |
 | `uv run --script tools/gen_voice.py` | Generate the voice notes |
 | `uv run --script tools/gen_ambience.py` | Generate ambience beds and SFX |
+| `npm run pacing` | Dead-air audit per beat (part of `gate`) |
+| `uv run --script tools/a11y.py` | WCAG contrast + colour-blind separation |
 
 ## Layout
 
@@ -43,7 +45,8 @@ src/        React app — chat shell, evidence drawer
   lib/ink.ts    the only place tags are parsed
   state/game.ts playout timing, save/load
 design/     survivor-bias-tokens.json (style lock) + mocks
-tools/      build_story · lint_story · playtest · gen_art · gen_voice · gen_ambience
+tools/      build_story · lint_story · playtest · pacing · a11y
+            gen_art · gen_voice · gen_ambience
 docs/       AUDIO_FINDINGS.md and friends
 ```
 
@@ -171,6 +174,37 @@ them, retested warm. Stable Audio does the job. Both traps worth knowing are in
 `docs/AUDIO_FINDINGS.md`: don't prompt for "quiet" (the first bed came back at −56 dBFS),
 and generated clips must be crossfade-wrapped to loop.
 
+## Pacing
+
+`npm run pacing` is part of the gate. It measures **forced dead air** per beat: time the
+player can neither act during nor skip. Voice notes (opt-in) and the cutscene (skippable
+from frame one) are reported separately, because counting them points the fix at the wrong
+place.
+
+It found a 16.7s beat and, more usefully, a characterisation error: T-7 says *"I've had a
+long time to get the order right"*, and a man reciting a prepared account types **briskly**.
+T-3 is the one who halts. Delay expresses hesitation, so T-7 and T-12 were retimed down and
+`MAX_DELAY` dropped from 2600 to 2000 — a long message already costs reading time, so
+pairing it with a long typing indicator charges twice for the same weight.
+
+Now: 29 beats, median 3.6s, longest 7.7s, nothing over the 9s warn line.
+
+## Accessibility
+
+`uv run --script tools/a11y.py`. All 18 rendered text pairs pass WCAG AA. Note that every
+micro-label is 10px mono, so the bar is 4.5:1 throughout — none of it qualifies for the
+large-text 3:1 allowance.
+
+The first run failed 7 pairs. Fixes: `ink-faint` lightened `#565E6A → #7C8593`, `t12`'s key
+`#4A6FA5 → #6B90C4`, and a **separate `accent-text`** (`#E56A5A`) introduced because
+`accent` (`#C8402F`) only reaches 3.7:1 as a label — a fill colour and a text colour have
+different jobs. The fill is unchanged, and white-on-accent in the unread badge passes at
+4.96:1.
+
+Because a timeline is identified by colour, the audit also checks that the three grades stay
+separable under dichromacy. Minimum ΔE is **36.3** (deuteranopia, t7/t12) against a collapse
+threshold of 10 — they hold up, and the text labels carry the same information regardless.
+
 ## Status
 
 Week 5 of a 4–6 week vertical slice. **Feature-complete**: all three selves, the full
@@ -185,10 +219,18 @@ art gates:  LPIPS 3/3 in band · NIMA 8/8 above floor
 payload:    108 KB js + 400 KB art + 116 KB voice + 377 KB ambience
 ```
 
-Remaining: a restart affordance, and a pacing pass with real eyes and ears.
+**Verified on mobile** (375x812) and tablet (768x1024): no horizontal overflow, the device
+frame collapses to fullscreen below the `sm` breakpoint and recentres above it, the
+convergence SVG fits without clipping, and every tap target is at least 40x40 — two weren't
+("try another night" was a 15px-tall text button whose padding lived on its wrapper).
 
-Known limitation: the save is written at the end of each beat, so reloading *during* the
-endgame sequence drops back to the ending choice rather than resuming mid-sequence.
-Consistent, not broken, but it wants the restart work anyway.
+Reaching an ending now offers **"try another night"**, which confirms first. And the save
+carries undelivered messages, so reloading mid-beat no longer silently loses lines: ink
+advances the moment a beat is read, but the messages land one at a time over several
+seconds, and the old save only recorded the delivered ones.
+
+Remaining before a kickoff post: a real playthrough with eyes and ears. Everything is
+verified structurally, and pacing is now measured rather than guessed — but the mix of
+typing rhythm, voice notes, cutscene and drone has never been *heard* together.
 
 See `story/BIBLE.md` for the design, `docs/AUDIO_FINDINGS.md` for the audio contracts.

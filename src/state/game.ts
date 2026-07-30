@@ -29,6 +29,8 @@ interface GameState {
   /** ink's pressure counter, mirrored so the ambience can track it. */
   pressure: number;
   muted: boolean;
+  /** True once an ending has been reached — the UI then offers a restart. */
+  finished: boolean;
 
   boot: () => void;
   openContact: (id: Sender) => void;
@@ -43,8 +45,14 @@ interface GameState {
   reset: () => void;
 }
 
-/** Cap so a long delay authored in ink can't stall the game. */
-const MAX_DELAY = 2600;
+/**
+ * Cap so a long delay authored in ink can't stall the game.
+ *
+ * Lowered from 2600 after tools/pacing.mjs measured beats of 16s+ with nothing
+ * for the player to do. A long message already costs the player reading time —
+ * pairing it with a long typing indicator charges twice for the same weight.
+ */
+const MAX_DELAY = 2000;
 
 /** Guards against StrictMode's double effect invocation. */
 let booted = false;
@@ -87,7 +95,8 @@ export const useGame = create<GameState>((set, get) => {
       });
     }
 
-    for (const msg of beat.messages) {
+    for (let i = 0; i < beat.messages.length; i += 1) {
+      const msg = beat.messages[i];
       // A screen beat parks the queue and hands the moment over entirely. The
       // overlay resolves the gate when it finishes or the player skips it.
       if (msg.screen) {
@@ -118,21 +127,39 @@ export const useGame = create<GameState>((set, get) => {
             ? s.unread
             : { ...s.unread, [thread]: (s.unread[thread] ?? 0) + 1 },
       }));
+
+      persist(beat.messages.slice(i + 1), thread);
     }
 
     // Mirror ink's pressure so the tension layer tracks the night closing in.
-    const pressure = get().engine.pressure();
-    set({ typing: null, choices: beat.choices, pressure });
+    const engine = get().engine;
+    const pressure = engine.pressure();
+    set({ typing: null, choices: beat.choices, pressure, finished: engine.finished() });
     ambience.setPressure(pressure);
     persist();
   }
 
-  function persist() {
+  /**
+   * Saves after every message, including whatever is still undelivered.
+   *
+   * ink's state advances the moment a beat is read, but the messages land one at
+   * a time over several seconds. Saving only at the end of a beat meant a reload
+   * mid-beat resumed from an engine that had already moved past lines the player
+   * never saw — they were silently lost. Carrying `pending` closes that.
+   */
+  function persist(pending: Message[] = [], pendingThread: Sender | null = null) {
     const { engine, threads, claims } = get();
     try {
       localStorage.setItem(
         SAVE_KEY,
-        JSON.stringify({ ink: engine.save(), threads, claims }),
+        JSON.stringify({
+          ink: engine.save(),
+          threads,
+          claims,
+          pending,
+          pendingThread,
+          choices: get().choices,
+        }),
       );
     } catch {
       // Private-mode / quota. A save failure must never break play.
@@ -152,6 +179,7 @@ export const useGame = create<GameState>((set, get) => {
     screen: null,
     pressure: 0,
     muted: ambience.isMuted(),
+    finished: false,
 
     boot() {
       // React StrictMode mounts effects twice in dev; without this the boot
@@ -167,7 +195,31 @@ export const useGame = create<GameState>((set, get) => {
         try {
           const saved = JSON.parse(raw);
           engine.load(saved.ink);
-          set({ threads: saved.threads ?? {}, claims: saved.claims ?? [] });
+          set({
+            threads: saved.threads ?? {},
+            claims: saved.claims ?? [],
+            pressure: engine.pressure(),
+            finished: engine.finished(),
+          });
+          ambience.setPressure(engine.pressure());
+
+          // Deliver anything the previous session was still mid-way through.
+          // Without this the lines are lost: ink has already advanced past them.
+          const pending: Message[] = saved.pending ?? [];
+          if (pending.length && saved.pendingThread) {
+            void play(
+              {
+                messages: pending,
+                gained: [],
+                contested: [],
+                choices: saved.choices ?? [],
+                ended: false,
+              },
+              saved.pendingThread,
+            );
+          } else {
+            set({ choices: saved.choices ?? [] });
+          }
           return;
         } catch {
           localStorage.removeItem(SAVE_KEY);
@@ -269,6 +321,7 @@ export const useGame = create<GameState>((set, get) => {
         armed: null,
         screen: null,
         pressure: 0,
+        finished: false,
       });
       get().boot();
     },

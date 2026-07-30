@@ -27,7 +27,7 @@ export function EvidenceDrawer() {
         <button
           onClick={toggleEvidence}
           aria-label="Close evidence"
-          className="grid h-8 w-8 place-items-center rounded-full text-ink-dim hover:bg-raised hover:text-ink"
+          className="-mr-1 grid h-10 w-10 place-items-center rounded-full text-ink-dim hover:bg-raised hover:text-ink"
         >
           <svg width="11" height="11" viewBox="0 0 11 11" stroke="currentColor" strokeWidth="1.6">
             <path d="M1 1l9 9M10 1l-9 9" />
@@ -57,7 +57,7 @@ export function EvidenceDrawer() {
                       {CONTACTS_BY_ID[c.source]?.label ?? c.source}
                     </span>
                     {c.contested && (
-                      <span className="font-mono text-[0.5625rem] uppercase tracking-[0.12em] text-accent">
+                      <span className="font-mono text-[0.5625rem] uppercase tracking-[0.12em] text-accent-text">
                         contested
                       </span>
                     )}

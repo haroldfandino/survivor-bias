@@ -10,8 +10,10 @@
     "hairline": "#22272F",
     "ink": "#E4E6EA",
     "ink-dim": "#8A929E",
-    "ink-faint": "#565E6A",
+    "ink-faint": "#7C8593",
     "accent": "#C8402F",
+    "$accent-note": "accent is the FILL colour. It only reaches 3.7:1 on raised, so text uses accent-text instead — a fill and a label have different jobs.",
+    "accent-text": "#E56A5A",
     "accent-dim": "#7A2A1F",
     "ok": "#4E8C6A",
     "warn": "#C89A3C"
@@ -42,7 +44,7 @@
     },
     "t12": {
       "label": "TIMELINE-12",
-      "key": "#4A6FA5",
+      "key": "#6B90C4",
       "grade": "blue-hour",
       "duotone": ["#070B12", "#7E9EC9"],
       "note": "Pre-dawn cold. The one that got furthest away from that night."

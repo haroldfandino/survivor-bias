@@ -11,8 +11,10 @@
   --color-hairline: #22272f;
   --color-ink: #e4e6ea;
   --color-ink-dim: #8a929e;
-  --color-ink-faint: #565e6a;
+  --color-ink-faint: #7c8593;
   --color-accent: #c8402f;
+  /* Text-safe accent. --color-accent is a fill; it fails AA as a label. */
+  --color-accent-text: #e56a5a;
   --color-accent-dim: #7a2a1f;
   --color-ok: #4e8c6a;
   --color-warn: #c89a3c;
@@ -21,7 +23,7 @@
   --color-t-prime: #e4e6ea;
   --color-t3: #e08b3c;
   --color-t7: #5e9c8a;
-  --color-t12: #4a6fa5;
+  --color-t12: #6b90c4;
 
   --radius-bubble: 1.125rem;
 

@@ -19,7 +19,7 @@ export function ContactList() {
       <header className="border-b border-hairline px-4 pb-3 pt-5">
         {armedClaim ? (
           <>
-            <div className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-accent">
+            <div className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-accent-text">
               quote this at —
             </div>
             <p className="mt-1.5 text-[0.8125rem] leading-snug text-ink-dim">

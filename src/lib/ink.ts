@@ -178,6 +178,14 @@ export class StoryEngine {
     return typeof v === 'number' ? v : 0;
   }
 
+  /**
+   * True once an ending has been reached. Every self answers "No signal." from
+   * here on, so the UI needs this to offer a way back in.
+   */
+  finished(): boolean {
+    return this.story.variablesState['finished'] === true;
+  }
+
   save(): string {
     return this.story.state.ToJson();
   }

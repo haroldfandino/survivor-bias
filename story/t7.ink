@@ -21,16 +21,16 @@
 { t7_open_seen: -> t7_hub }
 ~ t7_open_seen = true
 
-I wondered when you'd get to me. # from: t7 # delay: 1500
-Three of us reachable, and you went to him first. That's alright. Everyone goes to him first. # from: t7 # delay: 2200
+I wondered when you'd get to me. # from: t7 # delay: 850
+Three of us reachable, and you went to him first. That's alright. Everyone goes to him first. # from: t7 # delay: 1200
 
     * [He said it's happening tonight.]
-    Then we should be efficient. # from: t7 # delay: 1200
+    Then we should be efficient. # from: t7 # delay: 700
     * [Why does everyone go to him first?]
-    Because he cries. # from: t7 # delay: 1400
-    People find that easier than the alternative. # from: t7 # delay: 1800
+    Because he cries. # from: t7 # delay: 750
+    People find that easier than the alternative. # from: t7 # delay: 1000
 
-- I'll tell you whatever you want to know. I've had a long time to get the order right. # from: t7 # delay: 2000
+- I'll tell you whatever you want to know. I've had a long time to get the order right. # from: t7 # delay: 1100
 -> t7_hub
 
 === t7_hub ===
@@ -45,8 +45,8 @@ Three of us reachable, and you went to him first. That's alright. Everyone goes 
     * { t7_asked_gap } [Answer the question.]
         -> t7_gap_pressed
     * [I need to go.]
-        Of course. # from: t7 # delay: 900
-        I'll be here. I'm always here. # from: t7 # delay: 1300
+        Of course. # from: t7 # delay: 700
+        I'll be here. I'm always here. # from: t7 # delay: 700
         -> DONE
 
 // ---------------------------------------------------------------------------
@@ -56,35 +56,35 @@ Three of us reachable, and you went to him first. That's alright. Everyone goes 
 // ---------------------------------------------------------------------------
 === t7_night ===
 ~ t7_asked_night = true
-Right. From the top, and I'll keep to what I actually saw. # from: t7 # delay: 1600
-23:10 — we arrive. You park on the verge because the drive is full. # from: t7 # delay: 1800
-00:15 to about 01:00 — she's inside. Kitchen, mostly. She's fine. She's laughing at someone. # from: t7 # delay: 2400
+Right. From the top, and I'll keep to what I actually saw. # from: t7 # delay: 650
+23:10 — we arrive. You park on the verge because the drive is full. # from: t7 # delay: 700
+00:15 to about 01:00 — she's inside. Kitchen, mostly. She's fine. She's laughing at someone. # from: t7 # delay: 900
 ~ gain(C_TIME_CALL, "Nell made a call at 01:38 that lasted about forty seconds.", "t7")
-01:38 — she makes a call. Forty seconds, give or take. She's on the porch for it. # from: t7 # delay: 2300
-01:40 — she comes off the porch. # from: t7 # delay: 1600
-01:55 — I'm at the gate. The music's still going. # from: t7 # delay: 2000
-02:05 — that's when I start looking properly. # from: t7 # delay: 1800
+01:38 — she makes a call. Forty seconds, give or take. She's on the porch for it. # from: t7 # delay: 900
+01:40 — she comes off the porch. # from: t7 # delay: 650
+01:55 — I'm at the gate. The music's still going. # from: t7 # delay: 750
+02:05 — that's when I start looking properly. # from: t7 # delay: 700
 ~ gain(C_TIME_GAP, "T-7 accounts for every minute of that night except 01:40 to 01:55.", "t7")
-I wrote it out properly, years ago. # from: t7 # delay: 1900 # img: evidence/timeline_scan.webp
-That's the whole of it. Ask me anything inside that and I'll tell you. # from: t7 # delay: 2100
+I wrote it out properly, years ago. # from: t7 # delay: 750 # img: evidence/timeline_scan.webp
+That's the whole of it. Ask me anything inside that and I'll tell you. # from: t7 # delay: 800
 ~ tick()
 -> t7_hub
 
 === t7_call ===
 ~ t7_asked_call = true
-I don't know who she called. # from: t7 # delay: 1300
-I know it wasn't the house phone and I know it wasn't a taxi, because I checked both. Later. When checking things was all there was to do. # from: t7 # delay: 2600
-Forty seconds is a long time for no answer and a short time for a conversation. # from: t7 # delay: 2200
-Make of that what you like. I've made everything of it I can. # from: t7 # delay: 2000
+I don't know who she called. # from: t7 # delay: 700
+I know it wasn't the house phone and I know it wasn't a taxi, because I checked both. Later. When checking things was all there was to do. # from: t7 # delay: 1450
+Forty seconds is a long time for no answer and a short time for a conversation. # from: t7 # delay: 1200
+Make of that what you like. I've made everything of it I can. # from: t7 # delay: 1100
 ~ tick()
 -> t7_hub
 
 === t7_job ===
 ~ t7_asked_job = true
-Twenty-two years next March. # from: t7 # delay: 1300
-People assume that's penance. It isn't. Penance implies it helps. # from: t7 # delay: 2200
-It's just that I know exactly how long fifteen minutes is now. To the second. In a way I didn't then. # from: t7 # delay: 2600
-I know what can be undone inside fifteen minutes and I know what can't. # from: t7 # delay: 2400 # voice: t7_job_01
+Twenty-two years next March. # from: t7 # delay: 700
+People assume that's penance. It isn't. Penance implies it helps. # from: t7 # delay: 1200
+It's just that I know exactly how long fifteen minutes is now. To the second. In a way I didn't then. # from: t7 # delay: 1450
+I know what can be undone inside fifteen minutes and I know what can't. # from: t7 # delay: 1300 # voice: t7_job_01
 ~ tick()
 -> t7_hub
 
@@ -93,28 +93,28 @@ I know what can be undone inside fifteen minutes and I know what can't. # from: 
 // ---------------------------------------------------------------------------
 === t7_gap ===
 ~ t7_asked_gap = true
-I've accounted for everything I saw. # from: t7 # delay: 1700
-You're asking me to account for what I did, which is a different question, and you should be precise about which one you're asking. # from: t7 # delay: 2600
+I've accounted for everything I saw. # from: t7 # delay: 950
+You're asking me to account for what I did, which is a different question, and you should be precise about which one you're asking. # from: t7 # delay: 1450
     * [I'm asking where you were.]
-    I was at the party. # from: t7 # delay: 1200
+    I was at the party. # from: t7 # delay: 700
     * [What did you do?]
-    I want you to understand that I have never once said a false thing about that night. # from: t7 # delay: 2500
-    Not to you. Not to anyone. # from: t7 # delay: 1600
+    I want you to understand that I have never once said a false thing about that night. # from: t7 # delay: 1400
+    Not to you. Not to anyone. # from: t7 # delay: 900
 
-- Ask him. He was in the car the whole time. He'll tell you nothing happened. # from: t7 # delay: 2300
-He genuinely believes that. I've never taken it off him. # from: t7 # delay: 2000
+- Ask him. He was in the car the whole time. He'll tell you nothing happened. # from: t7 # delay: 1250
+He genuinely believes that. I've never taken it off him. # from: t7 # delay: 1100
 ~ tick()
 -> t7_hub
 
 // Second press, only after the first. He comes closest to it here and stops.
 === t7_gap_pressed ===
 ~ contest(C_TIME_GAP)
-No. # from: t7 # delay: 1400
-Here is what I'll give you, and it's more than I've given anyone. # from: t7 # delay: 2200
-At 01:40 she came off that porch and she said something to me. # from: t7 # delay: 2500
-And at 01:55 I was at the gate, and I was on my own. # from: t7 # delay: 2400
-You can do the arithmetic. I've done it every night for twenty-two years and it comes out the same way every time. # from: t7 # delay: 2800
-Don't ask me to say it. You're the only one who can still not need me to. # from: t7 # delay: 2600 # voice: t7_gap_01
+No. # from: t7 # delay: 750
+Here is what I'll give you, and it's more than I've given anyone. # from: t7 # delay: 1200
+At 01:40 she came off that porch and she said something to me. # from: t7 # delay: 1400
+And at 01:55 I was at the gate, and I was on my own. # from: t7 # delay: 1300
+You can do the arithmetic. I've done it every night for twenty-two years and it comes out the same way every time. # from: t7 # delay: 1550
+Don't ask me to say it. You're the only one who can still not need me to. # from: t7 # delay: 1450 # voice: t7_gap_01
 ~ tick()
 -> t7_hub
 
@@ -125,37 +125,37 @@ Don't ask me to say it. You're the only one who can still not need me to. # from
 === t7_quote ===
 {
     - quoting == "C_WHO_DROVE":
-        No. Nobody drove her. # from: t7 # delay: 1300
+        No. Nobody drove her. # from: t7 # delay: 700
         ~ contest(C_WHO_DROVE)
-        There were four cars on that verge and every one of them was still there at dawn. I know because I sat and looked at them. # from: t7 # delay: 2600
-        Whoever told you that is telling you a story with a car in it because a car means it was quick. # from: t7 # delay: 2600
+        There were four cars on that verge and every one of them was still there at dawn. I know because I sat and looked at them. # from: t7 # delay: 1450
+        Whoever told you that is telling you a story with a car in it because a car means it was quick. # from: t7 # delay: 1450
 
     - quoting == "C_CAR_MOVED":
-        It didn't move. # from: t7 # delay: 1100
+        It didn't move. # from: t7 # delay: 700
         ~ contest(C_CAR_MOVED)
-        He had the keys in his jacket. I watched him find them the next morning and I watched what it did to him. # from: t7 # delay: 2600
+        He had the keys in his jacket. I watched him find them the next morning and I watched what it did to him. # from: t7 # delay: 1450
 
     - quoting == "C_FORD_LIGHT":
-        The light was on. # from: t7 # delay: 1200
+        The light was on. # from: t7 # delay: 700
         ~ contest(C_FORD_LIGHT)
-        I can tell you the exact colour of the water because of that light. # from: t7 # delay: 2000
-        If it had been out, this would all be a much kinder story. # from: t7 # delay: 2200
+        I can tell you the exact colour of the water because of that light. # from: t7 # delay: 1100
+        If it had been out, this would all be a much kinder story. # from: t7 # delay: 1200
 
     - quoting == "C_WHO_ARGUED":
-        On the porch. Yes. # from: t7 # delay: 1300
-        That's the one true thing he's certain of, and he's certain of it because he couldn't hear it. # from: t7 # delay: 2400
-        Distance makes people very sure. # from: t7 # delay: 1800
+        On the porch. Yes. # from: t7 # delay: 700
+        That's the one true thing he's certain of, and he's certain of it because he couldn't hear it. # from: t7 # delay: 1300
+        Distance makes people very sure. # from: t7 # delay: 1000
 
     - quoting == "C_CAR_KEYS":
-        Correct. # from: t7 # delay: 1000
-        That detail is load-bearing and he doesn't know why. Leave it with him. # from: t7 # delay: 2200
+        Correct. # from: t7 # delay: 700
+        That detail is load-bearing and he doesn't know why. Leave it with him. # from: t7 # delay: 1200
 
     - quoting == "C_TIME_GAP":
         -> t7_gap_pressed
 
     - else:
-        That's consistent with what I saw. # from: t7 # delay: 1400
-        I won't embroider it for you. # from: t7 # delay: 1300
+        That's consistent with what I saw. # from: t7 # delay: 750
+        I won't embroider it for you. # from: t7 # delay: 700
 }
 ~ tick()
 -> t7_hub

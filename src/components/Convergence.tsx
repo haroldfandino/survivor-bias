@@ -206,7 +206,7 @@ export function Convergence() {
       {/* Skippable from the first frame — nobody should be held in a cutscene. */}
       <button
         onClick={dismissScreen}
-        className="mt-6 font-mono text-[0.625rem] uppercase tracking-[0.18em] text-ink-faint transition-colors hover:text-ink"
+        className="mt-4 px-6 py-4 font-mono text-[0.625rem] uppercase tracking-[0.18em] text-ink-faint transition-colors hover:text-ink"
       >
         {done ? 'continue' : 'skip'}
       </button>

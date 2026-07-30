@@ -22,7 +22,7 @@ export function ChatView({ id }: { id: Sender }) {
         <button
           onClick={closeThread}
           aria-label="Back to branches"
-          className="grid h-8 w-8 place-items-center rounded-full text-ink-dim hover:bg-raised hover:text-ink"
+          className="-ml-1 grid h-10 w-10 place-items-center rounded-full text-ink-dim hover:bg-raised hover:text-ink"
         >
           <svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="currentColor" strokeWidth="1.6">
             <path d="M7 1L1.5 6.5 7 12" />

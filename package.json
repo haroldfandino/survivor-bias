@@ -6,11 +6,12 @@
   "scripts": {
     "story": "node tools/build_story.mjs",
     "playtest": "node tools/playtest.mjs",
-    "gate": "node tools/build_story.mjs && node tools/lint_story.mjs && node tools/playtest.mjs",
+    "gate": "node tools/build_story.mjs && node tools/lint_story.mjs && node tools/playtest.mjs && node tools/pacing.mjs",
     "dev": "npm run story && vite",
     "build": "npm run gate && tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "pacing": "node tools/pacing.mjs"
   },
   "dependencies": {
     "inkjs": "^2.4.0",
