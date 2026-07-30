@@ -3,8 +3,8 @@
 Channel `C0AQGAYBE7Q`. A focused critique request, separate from the kickoff post in
 `POST-DRAFT.md`. Post this one *first* if you want a read before going wide.
 
-**This is live as a Slack draft** — `Dr0BM1VD7CNQ` in #iio-games, sitting in Drafts & Sent.
-Not sent. Edit it there and hit send when you're happy, or delete it.
+**This is live as a Slack draft** in #iio-games, sitting in Drafts & Sent — updated to carry
+the deployed link. Not sent. Edit it there and hit send when you're happy, or delete it.
 
 ## On the byline
 
@@ -41,15 +41,13 @@ The core verb is *cross-examination by quoting*: learn a claim from one self, qu
 
 *Known WIP, so you don't waste time on it:* nobody has played it at true speed with sound on yet; ambience is placeholder-grade (ACE-Step queues jobs and never drains them, so I'm on Stable Audio — if you've got audio out of ACE-Step I'd love to know how).
 
-No public link yet — happy to deploy it, drop a build in Drive, or hand over the ink files, whichever is least effort for you. Or just tear it apart in-thread from the above. :handshake:
+*Play it:* https://survivor-bias.vercel.app — one click, works on your phone too. Repo's at https://github.com/haroldfandino/survivor-bias if you'd rather read the `.ink` files than play. :handshake:
 ```
 
-## What to attach
+## Attached
 
-Nothing is required — the questions stand alone. But if you want him looking at something:
-
-- `marketing/kit.html` (427 KB, self-contained) — real portraits, evidence stills, the
-  convergence diagram. Drop it in Drive and link it.
-- A deployed URL is strictly better and I haven't made one; say the word.
-- Screenshots: I captured real ones while fixing the UI bugs, but grab your own during a
-  playthrough — the numbered tour is what this channel actually responds to.
+- **https://survivor-bias.vercel.app** — live, git-linked to `main`, so pushes auto-deploy. Verified in
+  production: all 12 assets serve, it plays, and the dev-only test seams are correctly absent.
+- `marketing/kit.html` (427 KB, self-contained) if you also want a Drive-able one-pager.
+- Screenshots: still worth grabbing 4–5 during a playthrough. A numbered tour is what this
+  channel actually responds to.

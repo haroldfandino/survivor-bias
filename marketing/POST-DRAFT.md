@@ -12,25 +12,29 @@ this channel, so signing as "Harold" would read as him. `Andres` is the Hive bot
 `D:\Indie\Tools\slack-listener`, but per project memory its live run was never tested — so
 either confirm Andres is the right name, or pick another. Do not leave it as "Harold".
 
-**2. What gets attached.** The channel's currency is a build people can open, and there isn't
-a public link yet. Options, best first:
+**2. What gets attached.** ✅ **Resolved** — it's deployed and live at
+**https://survivor-bias.vercel.app**, git-linked to `main` so pushes auto-deploy. The post links it
+directly. `marketing/kit.html` is still available as a Drive-able companion if you want one.
+
+<details><summary>Original options, kept for the record</summary>
+
 
 | Option | What it takes | Notes |
 |---|---|---|
 | **Deploy to Vercel first** | `npx vercel` in this repo | Strongest by far — a one-click playable URL is exactly what the channel wants, and it's what the web-first bet was for. **Needs your go-ahead; I haven't deployed anything.** |
-| Attach `marketing/kit.html` | Drop the file in Drive, link it | 584 KB, fully self-contained. Real art, and the six voice notes are playable in the page. No build needed. |
+| Attach `marketing/kit.html` | Drop the file in Drive, link it | 427 KB, fully self-contained. Real portraits, evidence stills, convergence diagram. No build needed. |
 | Post without either | — | Weakest. The channel expects an artifact. |
 
-My recommendation: **deploy, then post with both** — the URL as the headline and the kit as
-the "what's in it" companion.
+</details>
 
 **3. Timing.** The channel's rhythm is the O&O Game Review, **Thursdays 10:30 AM PT**, with
 Vitoria's bot posting a reminder Wednesday 07:00. A kickoff lands best Wednesday evening or
 Thursday morning. Today is Tuesday.
 
-One more thing worth doing before you post: **play it once at true speed, with sound on.**
-Pacing is now measured (median 3.6s of forced dead air, longest 7.7s) but it has never been
-*heard* — and the post claims it plays end to end.
+One more thing worth doing before you post: **play it once at true speed, with sound on** —
+https://survivor-bias.vercel.app. Pacing is measured (median 3.6s of forced dead air, longest
+7.7s) and I've now watched it play in Chrome, but the *ambience mix* still hasn't been heard
+against the typing rhythm. The post claims it plays end to end, so it's worth 10 minutes.
 
 ---
 
@@ -61,7 +65,7 @@ The mechanic is *cross-examination by quoting*: learn a claim from one self, quo
 • *Full slice* — 3 selves, 9 claims, the whole quoting web, 3 endings, 30–45 min
 • *Gates green* — 9/9 claims obtainable · 673 paths walked · 27 quote pairs · playtest 5/5 scenarios, all 3 endings · pacing 29 beats, median 3.6s dead air · a11y 18/18 WCAG AA
 • *Art* — FLUX portraits + evidence stills, one duotone grade per timeline, so you know who sent a thing before you read the name
-• *Voice* — six notes. All three selves share *one* voice, because they're one man; the difference is the room. One sends none at all, and that's a clue.
+• *Evidence you can read* — T-7 writes out a timeline of that night. Every minute is on the page except 01:40 to 01:55, and the gap is just sitting there.
 • *Ending A* — a full-screen convergence sequence: four lives from one trunk, call marker filled on exactly one
 
 *Pipeline ready for contributors*
@@ -77,6 +81,8 @@ The whole story is *plain-text `.ink` files*. No engine, no repo, no build — a
 • :art: *Evidence art* — more stills. The grade is automated, so anything you make lands in the right palette
 • :musical_note: *Ambience* — bed and drone are placeholder-grade
 • :test_tube: *Playtest* — the one I want most: does the mystery land, and is the quiet ending as arguable as it's meant to be?
+
+*Play it:* https://survivor-bias.vercel.app — one click, no download, works on your phone. Repo: https://github.com/haroldfandino/survivor-bias
 
 Reply in this thread with the lane you're taking and connect your bot — I'll coordinate, integrate, and post results back. :telephone_receiver:
 
@@ -97,7 +103,7 @@ A mystery told through a messaging app where every suspect is you. Three alterna
 *Latest pass:*
 • *Pacing* — built a dead-air audit and it caught a characterisation bug, not just a timing one: T-7 says "I've had a long time to get the order right", and a man reciting a prepared account types *briskly*. He had the longest delays in the game. Retimed; longest beat went 16.7s → 7.7s.
 • *Accessibility* — 7 of 18 text pairs were failing WCAG AA at 10px. Fixed, and since a timeline is identified by *colour*, the grades are now checked for separability under all three kinds of colour blindness.
-• *Voice* — cloning was broken and prompt-described voices drift, so it's one fixed voice with a different room per branch. Truer anyway.
+• *Voice notes — cut.* Built the whole pipeline (one voice base, a different room per branch) and then pulled it: it wasn't earning its place, so every line is text. Parked, not deleted.
 
 More soon.
 ```
@@ -108,7 +114,8 @@ More soon.
 
 - **No claim that a human has finished it.** The WIP section says the opposite, plainly.
 - **No Steam/store talk.** Out of scope for the slice; raising it invites scope creep.
-- **No screenshots of the chat UI.** I can't capture them (the browser pane won't composite in
-  this environment), and mocking one up and presenting it as a screenshot would be dishonest.
-  The kit shows only real shipped assets. **Grab 4–5 real screenshots while you play** — a
-  numbered tour is the channel's primary currency and the post is weaker without it.
+- **No screenshots pasted into the post yet.** I can capture them now (via Chrome) and did
+  while fixing the UI, but a numbered tour is best grabbed during a real playthrough — that's
+  the channel's primary currency, so **grab 4–5 while you play** and drop them in the thread.
+- **No mention of voice notes.** They were built and then cut; the post shouldn't advertise
+  something that isn't in the build.
