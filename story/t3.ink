@@ -109,7 +109,7 @@ hang on # from: t3 # delay: 1600
 hang on. you're not asking about me are you # from: t3 # delay: 1300
 ~ contest(C_TIME_GAP)
 there was someone coming back up from the water # from: t3 # delay: 1800
-i thought it was one of the lads. i've thought it was one of the lads for twenty years # from: t3 # delay: 2000
+i thought it was one of the lads. i've thought it was one of the lads for twenty years # from: t3 # delay: 2000 # voice: t3_gap_01
 ~ tick()
 -> t3_hub
 
@@ -122,7 +122,7 @@ i thought it was one of the lads. i've thought it was one of the lads for twenty
         who told you the car moved # from: t3 # delay: 900
         ~ contest(C_CAR_MOVED)
         that's wrong. i had the keys. i HAD them # from: t3 # delay: 1200
-        i've still got them. twenty years. they're in a drawer # from: t3 # delay: 1900
+        i've still got them. twenty years. they're in a drawer # from: t3 # delay: 1900 # voice: t3_keys_01
 
     - quoting == "C_FORD_LIGHT":
         the light wasn't out # from: t3 # delay: 800

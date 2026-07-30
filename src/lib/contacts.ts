@@ -1,4 +1,4 @@
-import type { Contact } from './types';
+import type { Contact, Sender } from './types';
 
 /**
  * The three branches, in the order the player meets them.
@@ -54,3 +54,14 @@ export const CONTACTS: Contact[] = [
 export const CONTACTS_BY_ID = Object.fromEntries(
   CONTACTS.map((c) => [c.id, c]),
 ) as Record<string, Contact>;
+
+/**
+ * Tint for any sender, including the ones that aren't contacts.
+ *
+ * Nell is warm — the only warm thing in the game, and she appears exactly once.
+ * See design/style-lock.md §3.
+ */
+export function tintFor(id: Sender): string {
+  if (id === 'nell') return '#F2D9B0';
+  return CONTACTS_BY_ID[id]?.tint ?? 'var(--color-ink-faint)';
+}

@@ -131,9 +131,10 @@ NELL # from: system # delay: 1400 # img: evidence/nell.webp
     * [Answer it.]
 
 - You answer on the second ring. # from: system # delay: 2000
-She says she's fine. She says she just wanted to check you were up. # from: system # delay: 2600
-She says the walk back is further than she thought and there's no light down by the water, and can you come and get her. # from: system # delay: 3000
-You say yes. # from: system # delay: 1800
+// Her only voice note in the game, and the only time she speaks at all.
+// Phone-band treated in tools/gen_voice.py, because she IS on a phone.
+hey — did i wake you? # from: nell # delay: 2200 # voice: nell_call_01
+You say yes. # from: system # delay: 2400
 You are already looking for your keys, because in this timeline you have them. # from: system # delay: 2600
 
 // The other branches stop existing. This is the moment the title lands.

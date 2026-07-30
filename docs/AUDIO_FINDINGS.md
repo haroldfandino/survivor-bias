@@ -10,10 +10,44 @@ Outputs land in `assets/audio/_smoke/`. **None of the contracts below are in
 `Rupert/rupert-api-guide.md`** — the guide has one table row per service. They
 were established by probing, so write down any further discoveries here.
 
+> ## CORRECTION (2026-07-29, later the same day)
+>
+> **The recommendation below to ship `/v1/audio/tts/speak` VoiceDesign was wrong,
+> and `tools/probe_voice_stability.py` is what caught it.** The endpoint works,
+> but a `voice_description` does **not reliably control the voice**:
+>
+> | metric | within-description spread | between-description spread |
+> |---|---|---|
+> | pitch | **0.158** | 0.132 |
+> | spectral centroid | **0.384** | 0.213 |
+> | duration | 0.286 | 0.235 |
+>
+> Rendering the *same* description three times varies more than rendering two
+> deliberately different ones. The same prompt returned 136 Hz / 3.52 s and
+> 94 Hz / 6.40 s — audibly two different people.
+>
+> **What shipped instead:** one fixed kokoro voice (`bm_lewis`) as the man, with
+> the per-branch difference applied by ffmpeg in `tools/gen_voice.py`. kokoro
+> named voices are perceptually stable — pitch spread 1.7%, centroid 1.0%,
+> duration identical to the millisecond. Nell gets `bf_emma`, as she's a
+> different person.
+>
+> This is what `BIBLE.md` §7 specified all along ("same voice base with
+> per-branch treatment"), and it's truer than cloning would have been: literally
+> the same voice, worn into three different shapes. Measured result —
+> **T-3** 92–96 Hz, 29% energy below 300 Hz (dark, close);
+> **T-7** 100–101 Hz, 16% (brighter, low end pulled);
+> **Nell** phone-band-limited at 9%.
+>
+> The rest of this document is still accurate and is kept as the record of what
+> each endpoint actually does.
+
 ## Verdict
 
 The week-4 beat is **not blocked**, but it lands via a different endpoint than
-planned. Voice cloning is broken; voice *design* works and is a better fit.
+planned. Voice cloning is broken; voice *design* works — but see the correction
+above before using it for anything that needs to sound like the same person
+twice.
 
 | Endpoint | Status | Notes |
 |---|---|---|

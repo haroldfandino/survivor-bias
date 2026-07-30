@@ -139,13 +139,23 @@ until they have a reason to act. Seeing the decision waiting there is the point.
 
 ## 7. Voice / VO notes
 
-Same cloned voice base for all four (it's the same person) with per-branch treatment — the
-thematic core of the audio design. See `tools/gen_voice.py`.
+One voice base for all the selves — it's the same person — with per-branch treatment.
+That's the thematic core of the audio design, and it survived contact with reality:
+cloning is broken and prompt-described voices drift, so the base is a **fixed kokoro
+voice (`bm_lewis`)** and the divergence is done in ffmpeg. See `tools/gen_voice.py` and
+the correction at the top of `docs/AUDIO_FINDINGS.md`.
 
-- **T-3:** closer to mic, room reverb, occasional breath. Slightly slower.
-- **T-7:** flat, even, mid-distance. No room.
-- **T-12:** *no voice notes at all.* His silence is the tell.
-- **Nell:** one voice note, held back until an ending. Never speak her before that.
+| | Treatment | Measured |
+|---|---|---|
+| **T-3** | closer to mic, room reverb, slightly slower | 92–96 Hz, 29% energy <300 Hz |
+| **T-7** | flat, even, mid-distance, no room | 100–101 Hz, 16% <300 Hz |
+| **T-12** | ***no voice notes at all.*** His silence is the tell. | — |
+| **Nell** | telephone band — she is literally on a phone | `bf_emma`, 9% <300 Hz |
+
+Six notes total: three T-3, two T-7, one Nell. T-12's zero is load-bearing, and
+`t12_voice` makes the absence legible so it isn't mistaken for missing content.
+
+Nell speaks exactly once, in ending A, after he answers. Never before.
 
 ## 8. Open questions
 

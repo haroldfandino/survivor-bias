@@ -123,18 +123,43 @@ legible on the page — the central mystery made visible.
 
 All eight assets are WebP and total **400 KB**.
 
+## Voice
+
+`uv run --script tools/gen_voice.py`. Six notes, 116 KB total.
+
+**All the selves share one voice**, because they are one man. The base is a fixed kokoro
+voice (`bm_lewis`) and the per-branch difference is applied with ffmpeg:
+
+| | Treatment | Measured |
+|---|---|---|
+| **T-3** | close-mic, room reverb, slower | 92–96 Hz, 29% energy <300 Hz |
+| **T-7** | flat, compressed, no room | 100–101 Hz, 16% <300 Hz |
+| **T-12** | **none — the silence is a clue** | — |
+| **Nell** | telephone band; she's on a phone | 9% <300 Hz, one note, ending A only |
+
+The plan called for voice *cloning*, then for prompt-described voices. Both fell over —
+cloning 500s, and `voice_description` drifts more between repeat renders than between
+different descriptions (`tools/probe_voice_stability.py` has the numbers). A fixed voice
+plus ffmpeg is what `BIBLE.md` §7 wanted anyway, and it's truer: literally the same voice,
+worn into different shapes.
+
+Waveforms in the UI are the **real peak envelope** of each file, generated alongside the
+audio into `src/voices.json`.
+
 ## Status
 
-Week 3 of a 4–6 week vertical slice. **Story-complete and illustrated**: all three
-selves, the full cross-examination web, all three endings, portraits and evidence stills.
-Audio is the remaining placeholder.
+Week 4 of a 4–6 week vertical slice. **Content-complete**: all three selves, the full
+cross-examination web, all three endings, portraits, evidence stills and voice notes.
 
 ```
 story gate: claims 9/9 obtainable · 4/9 contestable · 0 orphan
             673 paths walked · 27 quote pairs · 8/8 entries terminate
 playtest:   PASS — 5 scenarios, all 3 endings verified
 art gates:  LPIPS 3/3 in band · NIMA 8/8 above floor
-payload:    104 KB js + 400 KB art
+payload:    104 KB js + 400 KB art + 116 KB voice
 ```
+
+Remaining: the convergence screen for ending A's branch shutdown, ambience (ACE-Step
+queues but hasn't returned audio — see `docs/AUDIO_FINDINGS.md`), and restart/polish.
 
 See `story/BIBLE.md` for the design, `docs/AUDIO_FINDINGS.md` for the audio contracts.
