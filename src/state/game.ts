@@ -31,9 +31,15 @@ interface GameState {
   muted: boolean;
   /** True once an ending has been reached — the UI then offers a restart. */
   finished: boolean;
+  /** Which ending landed ('A'|'B'|'C', '' before one has). Gates the codas. */
+  ending: string;
+  /** True while the chapter list (before/after) is covering the home screen. */
+  chapterList: boolean;
 
   boot: () => void;
   openContact: (id: Sender) => void;
+  openChapterList: () => void;
+  closeChapterList: () => void;
   closeThread: () => void;
   choose: (index: number) => void;
   arm: (claimId: string | null) => void;
@@ -134,7 +140,13 @@ export const useGame = create<GameState>((set, get) => {
     // Mirror ink's pressure so the tension layer tracks the night closing in.
     const engine = get().engine;
     const pressure = engine.pressure();
-    set({ typing: null, choices: beat.choices, pressure, finished: engine.finished() });
+    set({
+      typing: null,
+      choices: beat.choices,
+      pressure,
+      finished: engine.finished(),
+      ending: engine.ending(),
+    });
     ambience.setPressure(pressure);
     persist();
   }
@@ -180,6 +192,8 @@ export const useGame = create<GameState>((set, get) => {
     pressure: 0,
     muted: ambience.isMuted(),
     finished: false,
+    ending: '',
+    chapterList: false,
 
     boot() {
       // React StrictMode mounts effects twice in dev; without this the boot
@@ -200,6 +214,7 @@ export const useGame = create<GameState>((set, get) => {
             claims: saved.claims ?? [],
             pressure: engine.pressure(),
             finished: engine.finished(),
+            ending: engine.ending(),
           });
           ambience.setPressure(engine.pressure());
 
@@ -236,6 +251,8 @@ export const useGame = create<GameState>((set, get) => {
         openThread: id,
         unread: { ...s.unread, [id]: 0 },
         choices: [],
+        // Opening anything dismisses the chapter list behind it.
+        chapterList: false,
       }));
 
       const { engine, armed } = get();
@@ -249,6 +266,14 @@ export const useGame = create<GameState>((set, get) => {
 
     closeThread() {
       set({ openThread: null, choices: [], typing: null });
+    },
+
+    openChapterList() {
+      set({ chapterList: true, evidenceOpen: false });
+    },
+
+    closeChapterList() {
+      set({ chapterList: false });
     },
 
     choose(index) {
@@ -322,6 +347,8 @@ export const useGame = create<GameState>((set, get) => {
         screen: null,
         pressure: 0,
         finished: false,
+        ending: '',
+        chapterList: false,
       });
       get().boot();
     },

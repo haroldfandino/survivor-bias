@@ -85,6 +85,15 @@ function run(name, body) {
     offered(fragment) {
       return story.currentChoices.some((c) => c.text.includes(fragment));
     },
+    /** Take the first option on offer. Used to walk a beat's internal branches. */
+    pickFirst() {
+      const choice = story.currentChoices[0];
+      if (!choice) return false;
+      story.ChooseChoiceIndex(choice.index);
+      drain();
+      log.push(`  pick (first) "${choice.text}"`);
+      return true;
+    },
     /** Terminal endings leave the story unable to continue and choiceless. */
     ended() {
       return !story.canContinue && story.currentChoices.length === 0;
@@ -101,6 +110,14 @@ function run(name, body) {
     },
     /** Full-screen sequences this run handed off to, in order. */
     screens: () => [...screens],
+    /**
+     * ink's pressure counter. Exposed so the chapter scenarios can assert that
+     * reading the background costs the player no part of their night.
+     */
+    pressure() {
+      const v = story.variablesState['pressure'];
+      return typeof v === 'number' ? v : -1;
+    },
   };
 
   body(api);
@@ -256,9 +273,139 @@ run('the deadline is felt, never shown', (t) => {
 });
 
 // ===========================================================================
+// CHAPTERS — the prequels either side of Tonight.
+//
+// The load-bearing property is ISOLATION: a chapter must not advance pressure or
+// file claims, or reading the background would quietly cost the player their
+// night. Asserted here rather than trusted, because it's invisible in play.
+// ===========================================================================
+
+/**
+ * Walk a prequel hub through its gated question chain.
+ *
+ * Beats carry an internal choice, and the gather AFTER that choice holds some of
+ * the beat's load-bearing lines — so each question is followed through to the
+ * point where the beat hands back to the hub. Re-entering the hub early (which
+ * an earlier version of this did) abandons the beat and silently skips those
+ * lines. The hub is recognised by its exit option.
+ */
+function walkChapter(t, hub, questions) {
+  for (const q of questions) {
+    t.open(hub, hub);
+    if (!t.pick(q)) return;
+    let guard = 0;
+    while (!t.offered("I'll come back.") && guard++ < 4) {
+      if (!t.pickFirst()) break;
+    }
+  }
+}
+
+run('CHAPTER 2A — T-3 twenty years, and it costs the player nothing', (t) => {
+  t.open('ch2a_open', 'BEFORE — TIMELINE-3');
+  t.expect('opens on his own terms', t.said('nobody asks for the twenty years'));
+
+  walkChapter(t, 'ch2a_hub', [
+    'Start at the beginning.',
+    'Did you ever stop?',
+    'And now?',
+    'Where were you at twenty to two?',
+  ]);
+  t.expect('lands on the forty seconds', t.said('forty seconds'));
+  t.expect('admits the memory is unreliable', t.said('forgetting which parts'));
+  t.expect('files NO claims', t.claims.size === 0);
+  t.expect('never advances pressure', t.pressure() === 0);
+});
+
+run('CHAPTER 2B — T-7 twenty years, and the gap survives it', (t) => {
+  t.open('ch2b_open', 'BEFORE — TIMELINE-7');
+  walkChapter(t, 'ch2b_hub', [
+    'Why did you become a paramedic?',
+    'Did it work?',
+    'And now?',
+    'Where were you at twenty to two?',
+  ]);
+  // The whole point: the prequel must NOT give away 01:40–01:55, or Tonight's
+  // central extraction becomes redundant.
+  t.expect('refuses the gap', t.said('not managed one'));
+  t.expect('does not name the gate here', !t.said('I was at the gate.'));
+  t.expect('foreshadows tonight instead', t.said('on a call across town'));
+  t.expect('files NO claims', t.claims.size === 0);
+  t.expect('never advances pressure', t.pressure() === 0);
+});
+
+run('CHAPTER 2C — T-12 twenty years, and he still does not confess', (t) => {
+  t.open('ch2c_open', 'BEFORE — TIMELINE-12');
+  walkChapter(t, 'ch2c_hub', [
+    'Why did you leave so fast?',
+    'What did you tell people?',
+    'And now?',
+    'Where were you at twenty to two?',
+  ]);
+  t.expect('shows the construction', t.said('answer the small questions economically'));
+  t.expect('names the real stake', t.said('wrong about the last twenty years'));
+  t.expect('warns the player about himself', t.said('easier to believe'));
+  t.expect('still no confession', !t.said('I lied'));
+  t.expect('files NO claims', t.claims.size === 0);
+  t.expect('never advances pressure', t.pressure() === 0);
+});
+
+/** The full ending-A route, so a coda can be tested from a real playthrough. */
+function routeToEndingA(t) {
+  gatherEverything(t);
+  t.quote('C_CAR_MOVED', 't3_quote', 'T-3');
+  t.quote('C_FORD_LIGHT', 't3_quote', 'T-3');
+  t.quote('C_WHO_DROVE', 't7_quote', 'T-7');
+  t.open('t3_hub', 'TIMELINE-3');
+  t.pick('Where were you at quarter to two?');
+  t.open('t7_hub', 'TIMELINE-7');
+  t.pick("You've accounted for every minute but fifteen.");
+  t.pick("I'm asking where you were.");
+  t.open('t7_hub', 'TIMELINE-7');
+  t.pick('Answer the question.');
+  t.open('endgame', 'TONIGHT');
+  t.pick('Wait for the phone to ring.');
+  t.pick('Answer it.');
+}
+
+run('CODA 3A — reachable after ending A, and only then', (t) => {
+  routeToEndingA(t);
+  t.expect('ending A reached', t.said('Somebody picked up.'));
+
+  // The endings terminate with `-> END`. This asserts a coda can still be
+  // entered afterwards — the thing that would silently be broken otherwise.
+  t.open('ch3a_open', 'AFTER — PREVENTED');
+  t.expect('coda opens after an ending', t.said('Three days.'));
+  t.expect('not the locked message', !t.said("haven't made yet"));
+  t.expect('not the mismatch message', !t.said('You reached a different one.'));
+
+  t.open('ch3a_hub', 'AFTER — PREVENTED');
+  t.pick('Talk to TIMELINE-7.');
+  t.pickFirst();
+  t.expect('T-7 admits he arranged the shift', t.said('I arranged it'));
+
+  // Nell is held behind all three, exactly as she is held behind the ending.
+  t.open('ch3a_hub', 'AFTER — PREVENTED');
+  t.expect('Nell is not offered early', !t.offered('Wait.'));
+
+  // The wrong coda stays shut even now.
+  t.open('ch3b_open', 'AFTER — SUBSTITUTED');
+  t.expect('B rejects an ending-A save', t.said('You reached a different one.'));
+});
+
+run('CODAS — locked until their own night has been reached', (t) => {
+  t.open('ch3a_open', 'AFTER — PREVENTED');
+  t.expect('A is locked before any ending', t.said("haven't made yet"));
+  t.open('ch3b_open', 'AFTER — SUBSTITUTED');
+  t.expect('B is locked too', t.said("haven't made yet"));
+  t.expect('no coda content leaks', !t.said('she asked after you'));
+});
+
+// ===========================================================================
 
 if (failures) {
   console.error(`\n\x1b[31mplaytest FAIL\x1b[0m — ${failures} scenario(s) failed`);
   process.exit(1);
 }
-console.log('\n\x1b[32mplaytest PASS\x1b[0m — 5 scenarios, all 3 endings verified');
+console.log(
+  '\n\x1b[32mplaytest PASS\x1b[0m — 10 scenarios, all 3 endings + 3 prequels + codas verified',
+);

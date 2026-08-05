@@ -27,6 +27,11 @@ VAR pressure = 0
 VAR finished = false
 VAR acted_on = ""
 
+// Which ending landed: "A" | "B" | "C". Set by the three ending knots and read
+// only by the coda chapters (ch3a–ch3c), which unlock against it. Tonight itself
+// never branches on this — `finished` is the flag that matters in here.
+VAR ending = ""
+
 // Where the night is by the time the player has done N substantive things.
 // Tuned so a thorough run (~15 actions to reach ending A) still has room, and
 // only a player who wanders or acts on bad information feels it close in.
@@ -120,6 +125,7 @@ Not yet. # from: system # delay: 1200
 // ===========================================================================
 === ending_prevented ===
 ~ finished = true
+~ ending = "A"
 You don't go anywhere. # from: system # delay: 1800
 You sit on the edge of your bed at twenty past one in the morning with your phone in your hand, and you wait. # from: system # delay: 2600
 
@@ -163,6 +169,7 @@ Somebody picked up. # from: system # delay: 2600
 // ===========================================================================
 === ending_substituted ===
 ~ finished = true
+~ ending = "B"
 { acted_on == "ford":
     You take the river road. # from: system # delay: 1800
     He was right about one thing — you can't see where the edge is. You stand in the dark by the water for forty minutes and nothing happens, because nothing was ever going to happen here. # from: system # delay: 3200
@@ -193,6 +200,7 @@ He was never trying to hurt you. He was trying to bring you home. # from: system
 // ===========================================================================
 === ending_refused ===
 ~ finished = true
+~ ending = "C"
 You put the phone face down on the bedside table. # from: system # delay: 2200
 
 { knows_the_truth():

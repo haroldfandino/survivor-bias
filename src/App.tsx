@@ -4,6 +4,7 @@ import { ContactList } from './components/ContactList';
 import { ChatView } from './components/ChatView';
 import { EvidenceDrawer } from './components/EvidenceDrawer';
 import { Convergence } from './components/Convergence';
+import { ChapterSelect } from './components/ChapterSelect';
 
 /**
  * The device frame.
@@ -12,8 +13,17 @@ import { Convergence } from './components/Convergence';
  * desktop monitor — on a phone it fills the screen and the frame disappears.
  */
 export default function App() {
-  const { boot, openThread, claims, toggleEvidence, evidenceOpen, screen, finished, reset } =
-    useGame();
+  const {
+    boot,
+    openThread,
+    claims,
+    toggleEvidence,
+    evidenceOpen,
+    screen,
+    finished,
+    reset,
+    chapterList,
+  } = useGame();
   const [confirmRestart, setConfirmRestart] = useState(false);
 
   useEffect(() => {
@@ -31,6 +41,7 @@ export default function App() {
       >
         <main className="relative flex-1 overflow-hidden">
           {openThread ? <ChatView id={openThread} /> : <ContactList />}
+          {chapterList && !openThread && <ChapterSelect />}
           <EvidenceDrawer />
           {screen === 'convergence' && <Convergence />}
         </main>
@@ -39,7 +50,7 @@ export default function App() {
             is nothing else to do — so the footer becomes the way back in. The
             wording stays in the game's register rather than saying "restart",
             and it asks first, because reaching an ending took 30 minutes. */}
-        {finished && !screen && !evidenceOpen && (
+        {finished && !screen && !evidenceOpen && !chapterList && (
           <div className="border-t border-hairline bg-raised px-4">
             {confirmRestart ? (
               <div className="flex items-center justify-between gap-3 py-3">
@@ -79,7 +90,7 @@ export default function App() {
             being able to check a claim mid-conversation. Hidden during a
             full-screen sequence: the moment takes the whole frame, and after an
             ending the restart bar takes its place. */}
-        {!evidenceOpen && !screen && !finished && (
+        {!evidenceOpen && !screen && !finished && !chapterList && (
           <button
             onClick={toggleEvidence}
             className="flex items-center justify-between border-t border-hairline bg-raised px-4 py-3 text-left transition-colors hover:bg-input"

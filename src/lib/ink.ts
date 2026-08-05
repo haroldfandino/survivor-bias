@@ -186,6 +186,15 @@ export class StoryEngine {
     return this.story.variablesState['finished'] === true;
   }
 
+  /**
+   * Which ending landed: 'A' | 'B' | 'C', or '' before one has. Read by the
+   * chapter list to decide which coda to offer — see lib/chapters.ts.
+   */
+  ending(): string {
+    const v = this.story.variablesState['ending'];
+    return typeof v === 'string' ? v : '';
+  }
+
   save(): string {
     return this.story.state.ToJson();
   }

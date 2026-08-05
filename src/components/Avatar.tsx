@@ -18,9 +18,12 @@ export function Avatar({ id, size = 40 }: { id: Sender; size?: number }) {
   const [failed, setFailed] = useState(false);
   const contact = CONTACTS_BY_ID[id];
   const tint = contact?.tint ?? 'var(--color-ink-faint)';
+  // Chapter threads borrow the face of the self they're about, so a prequel is
+  // recognisably his rather than falling back to a glyph.
+  const face = contact?.avatar ?? id;
   // The player's own timeline has no number — it's the one that hasn't branched.
-  const num = id === 'prime' ? '·' : id.replace('t', '');
-  const hasPortrait = !failed && id !== 'prime' && id !== 'system' && id !== 'you';
+  const num = face === 'prime' ? '·' : face.replace('t', '');
+  const hasPortrait = !failed && face !== 'prime' && face !== 'system' && face !== 'you';
 
   return (
     <div
@@ -35,7 +38,7 @@ export function Avatar({ id, size = 40 }: { id: Sender; size?: number }) {
     >
       {hasPortrait ? (
         <img
-          src={`/portraits/${id}.webp`}
+          src={`/portraits/${face}.webp`}
           alt=""
           width={size}
           height={size}

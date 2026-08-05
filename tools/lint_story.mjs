@@ -43,22 +43,30 @@ const declaredClaims = (() => {
 })();
 
 /**
- * Knots referenced by the UI's contact table.
+ * Knots referenced by the UI's thread tables.
  *
- * Only knots belonging to *reachable* contacts must exist — unreachable
- * branches are deliberately unwritten in the week-1 slice, and the gate should
- * not demand content the scope hasn't reached yet.
+ * Both contacts.ts (Tonight's four threads) and chapters.ts (the prequels and
+ * codas) are read: a typo in either ships a thread that opens onto nothing, and
+ * the compiler can't catch it because the knot name is only ever a string.
+ *
+ * Only knots belonging to *reachable* threads must exist — an unreachable entry
+ * is deliberately unwritten, and the gate should not demand content the scope
+ * hasn't reached yet.
  */
 const requiredKnots = (() => {
-  const src = readFileSync(join(root, 'src', 'lib', 'contacts.ts'), 'utf8');
   const re =
     /id:\s*'([^']+)'[\s\S]*?entry:\s*'([^']+)'[\s\S]*?quoteEntry:\s*'([^']+)'[\s\S]*?reachable:\s*(true|false)/g;
   const knots = [];
-  for (const m of src.matchAll(re)) {
-    if (m[4] === 'true') knots.push(m[2], m[3]);
-  }
-  if (!knots.length) {
-    warnings.push('contacts.ts: no reachable contacts found — nothing to walk');
+  for (const file of ['contacts.ts', 'chapters.ts']) {
+    const src = readFileSync(join(root, 'src', 'lib', file), 'utf8');
+    let found = 0;
+    for (const m of src.matchAll(re)) {
+      if (m[4] === 'true') {
+        knots.push(m[2], m[3]);
+        found++;
+      }
+    }
+    if (!found) warnings.push(`${file}: no reachable threads found — nothing to walk`);
   }
   return knots;
 })();

@@ -34,3 +34,4 @@ assets/audio/_smoke/
 assets/_raw/
 assets/**/_raw/
 assets/**/_probe/
+.vercel

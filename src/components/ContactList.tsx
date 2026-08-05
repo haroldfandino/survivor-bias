@@ -10,7 +10,8 @@ import { Avatar } from './Avatar';
  * changes to say so.
  */
 export function ContactList() {
-  const { threads, unread, openContact, armed, claims, arm, muted, toggleMute } = useGame();
+  const { threads, unread, openContact, armed, claims, arm, muted, toggleMute, openChapterList } =
+    useGame();
   const armedClaim = claims.find((c) => c.id === armed);
   const branchCount = CONTACTS.filter((c) => c.id !== 'prime' && c.reachable).length;
 
@@ -43,15 +44,29 @@ export function ContactList() {
                   {branchCount} reachable · signal unstable
                 </p>
               </div>
-              {/* Discoverable on the first screen. Ambient sound in a text game
-                  needs to be one tap away from off, and it persists. */}
-              <button
-                onClick={toggleMute}
-                aria-label={muted ? 'Unmute sound' : 'Mute sound'}
-                title={muted ? 'Sound off' : 'Sound on'}
-                className="-mr-1 grid h-8 w-8 shrink-0 place-items-center rounded-full text-ink-faint transition-colors hover:bg-raised hover:text-ink"
-              >
-                {muted ? (
+              <div className="-mr-1 flex shrink-0 items-center gap-0.5">
+                {/* The twenty years either side of tonight. Not in the list
+                    below: that list is who you're talking to now. */}
+                <button
+                  onClick={openChapterList}
+                  aria-label="Open the record"
+                  title="The record"
+                  className="grid h-8 w-8 place-items-center rounded-full text-ink-faint transition-colors hover:bg-raised hover:text-ink"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4">
+                    <path d="M2 2.5h4a1.5 1.5 0 011.5 1.5v7A1.5 1.5 0 006 10H2z" />
+                    <path d="M12 2.5H8A1.5 1.5 0 006.5 4v7A1.5 1.5 0 018 10h4z" />
+                  </svg>
+                </button>
+                {/* Discoverable on the first screen. Ambient sound in a text game
+                    needs to be one tap away from off, and it persists. */}
+                <button
+                  onClick={toggleMute}
+                  aria-label={muted ? 'Unmute sound' : 'Mute sound'}
+                  title={muted ? 'Sound off' : 'Sound on'}
+                  className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-ink-faint transition-colors hover:bg-raised hover:text-ink"
+                >
+                  {muted ? (
                   <svg width="15" height="14" viewBox="0 0 15 14" fill="none" stroke="currentColor" strokeWidth="1.4">
                     <path d="M1 5h2.5L7 2v10L3.5 9H1z" />
                     <path d="M10 5l4 4M14 5l-4 4" />
@@ -61,8 +76,9 @@ export function ContactList() {
                     <path d="M1 5h2.5L7 2v10L3.5 9H1z" />
                     <path d="M10 4.5a4 4 0 010 5M12.2 2.6a7 7 0 010 8.8" />
                   </svg>
-                )}
-              </button>
+                  )}
+                </button>
+              </div>
             </div>
           </>
         )}

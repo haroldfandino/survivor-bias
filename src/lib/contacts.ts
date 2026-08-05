@@ -1,4 +1,5 @@
 import type { Contact, Sender } from './types';
+import { CHAPTERS } from './chapters';
 
 /**
  * The three branches, in the order the player meets them.
@@ -51,8 +52,16 @@ export const CONTACTS: Contact[] = [
   },
 ];
 
+/**
+ * Every openable thread, keyed by id — the four contacts plus the chapters.
+ *
+ * Chapters are included here and not in CONTACTS on purpose: CONTACTS is the
+ * home screen's list and must stay the four branches, while everything that
+ * resolves a thread (openContact, ChatView's header, Avatar, tintFor) needs to
+ * find chapters too.
+ */
 export const CONTACTS_BY_ID = Object.fromEntries(
-  CONTACTS.map((c) => [c.id, c]),
+  [...CONTACTS, ...CHAPTERS].map((c) => [c.id, c]),
 ) as Record<string, Contact>;
 
 /**

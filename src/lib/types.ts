@@ -2,7 +2,26 @@
  * `prime` is the player's own timeline — the endgame surface, not a person.
  * `nell` speaks exactly once, in ending A. She is never a contact.
  */
-export type Sender = 'you' | 't3' | 't7' | 't12' | 'prime' | 'nell' | 'system';
+export type Sender =
+  | 'you'
+  | 't3'
+  | 't7'
+  | 't12'
+  | 'prime'
+  | 'nell'
+  | 'system'
+  /**
+   * Chapter threads — the prequels (ch2a–ch2c) and codas (ch3a–ch3c). They are
+   * threads rather than people: the bubbles inside them still come `# from: t3`
+   * and friends, so they render in the right voice and colour. Only the thread
+   * itself is addressed by these ids.
+   */
+  | 'ch2a'
+  | 'ch2b'
+  | 'ch2c'
+  | 'ch3a'
+  | 'ch3b'
+  | 'ch3c';
 
 /** One chat bubble. `delay` is how long to hold the typing indicator first. */
 export interface Message {
@@ -42,4 +61,9 @@ export interface Contact {
   quoteEntry: string;
   /** false = present in the list but not yet contactable (week-1 scope). */
   reachable: boolean;
+  /**
+   * Borrow another sender's portrait and monogram. Chapter threads use this so
+   * the T-3 prequel wears T-3's face instead of falling back to a glyph.
+   */
+  avatar?: Sender;
 }

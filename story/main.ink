@@ -17,6 +17,13 @@ INCLUDE t3.ink
 INCLUDE t7.ink
 INCLUDE t12.ink
 
+// Chapters. Prequels (2a–2c) and codas (3a–3c). They share this story instance
+// but never touch Tonight's state — see the CHAPTER RULES header in ch2a.ink.
+INCLUDE ch2a.ink
+INCLUDE ch2b.ink
+INCLUDE ch2c.ink
+INCLUDE ch3.ink
+
 // Fires once, on a cold start, before any conversation is opened.
 // Tags are inline — see the header note in t3.ink for why.
 === boot ===
