@@ -150,6 +150,10 @@ HTML = f"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Unlisted, not secret. The kit is served from public/ so anyone with the
+     exact link can open it, but it must not turn up in a search result: it is
+     pre-release material addressed to named reviewers. -->
+<meta name="robots" content="noindex, nofollow">
 <title>SURVIVOR BIAS — review kit</title>
 <style>
   :root {{
