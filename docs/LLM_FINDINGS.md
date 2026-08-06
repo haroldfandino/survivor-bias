@@ -95,3 +95,40 @@ a player was read by someone first.
 GENERATE remains interesting, because its failure mode is a deflection rather
 than a false statement, and the cheap keyword gate genuinely does refuse
 timestamps and locations. It is untested at volume.
+
+---
+
+## Actioned (2026-08-06)
+
+Recommendation 1 is done. `_facts_survive` is replaced by `check_fidelity`, and
+`tools/llm_voice.py --selftest` runs **offline** as part of `npm run gate`, with
+both failures above as permanent regression cases. 11/11.
+
+What it checks, and why each one is there:
+
+| Check | Catches | Failure it was written for |
+|---|---|---|
+| dropped digits | `01:38` disappearing | — |
+| dropped quantity words | `twenty years` → `years` | found while writing the tests: a *deletion*, which slipped past both other checks |
+| polarity scope | negation moving clause | the T-7 inversion |
+| added content words (>2) | invented propositions | the T-3 addition |
+
+Two things worth knowing about how it got there:
+
+- **The naive polarity check did not work.** Recording the ordered list of
+  negation words passes the T-7 inversion, because both sentences contain exactly
+  one "can't" — only the clause it attaches to moved. It had to become
+  *(negator, next content word)* pairs: `("can't", None)` vs `("can't", "undone")`.
+  Written for that case, it initially failed that case.
+- **This is a heuristic, not entailment.** What recommends it is that it
+  demonstrably rejects both recorded failures with legible reasons, where the
+  previous gate caught neither and the cosine gate proposed in
+  `LLM_INTEGRATION.md` would have caught neither either. It is a filter in front
+  of a human, not a substitute for one.
+
+EXPAND is held to a stricter, non-heuristic standard: `check_expansion` requires
+the approved line to survive **verbatim as a prefix**, and refuses appended text
+containing anything checkable. That is mechanical and unarguable, which is why
+EXPAND is the operation worth using first.
+
+Recommendation 3's other half — GENERATE at volume — is still untested.

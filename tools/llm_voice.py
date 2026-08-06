@@ -131,6 +131,163 @@ THINK = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
 FENCE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL)
 
 
+# ---------------------------------------------------------------------------
+# FIDELITY GATE
+#
+# The first version of this gate checked that every number in the original
+# survived in the variant. docs/LLM_FINDINGS.md records what got through it:
+#
+#   T-3  "i've still got them. twenty years. they're in a drawer."
+#     ->  "... and i'm sorry if i mess up the count but it's been that long ..."
+#        An ADDITION. New content, plausible and in voice, and a
+#        characterisation decision nobody approved — it softens the one fact he
+#        is certain about.
+#
+#   T-7  "I know what can be undone inside fifteen minutes, and I know what can't."
+#     ->  "I know what can't be undone inside fifteen minutes, and I know what can."
+#        A POLARITY INVERSION. Opposite meaning, every number intact.
+#
+# Both preserved "twenty"/"fifteen", so number-preservation passed both. It was
+# the wrong invariant: cheap, and measuring almost nothing.
+#
+# The cosine-similarity gate proposed in LLM_INTEGRATION.md would also have
+# passed the inversion — bag-of-words similarity is near-blind to negation,
+# because "can" and "can't" are one token apart and stopword lists often drop
+# both.
+#
+# So this gate checks the two things that actually went wrong. It is a
+# heuristic, not entailment; what it has going for it is that it demonstrably
+# rejects both recorded failures, which `--selftest` proves without touching the
+# gateway. Anything it passes still needs a human before it reaches a player.
+# ---------------------------------------------------------------------------
+
+# Words that flip or scope a claim. Order matters, so this is a sequence check
+# rather than a set check: the T-7 failure preserved the multiset of negations
+# and only changed which clause each one attached to.
+NEGATORS = {
+    "not", "n't", "never", "no", "none", "nobody", "nothing", "cannot",
+    "can't", "couldn't", "wouldn't", "didn't", "wasn't", "weren't", "isn't",
+    "aren't", "won't", "doesn't", "don't", "hadn't", "hasn't", "haven't",
+}
+
+# Ignored when looking for added content: function words carry no claim.
+STOPISH = {
+    "a", "an", "and", "the", "but", "or", "so", "if", "it", "its", "i", "me",
+    "my", "you", "your", "he", "him", "his", "she", "her", "they", "them",
+    "we", "us", "that", "this", "these", "those", "then", "than", "of", "in",
+    "on", "at", "to", "for", "with", "from", "by", "as", "is", "was", "were",
+    "be", "been", "am", "are", "do", "did", "does", "have", "has", "had",
+    "what", "who", "when", "where", "how", "why", "just", "about", "up",
+    "out", "off", "over", "there", "here", "yeah", "oh", "well", "like",
+    "know", "think", "mean", "say", "said", "get", "got", "go", "going",
+    "one", "still", "all", "any", "some", "very", "really", "too", "also",
+}
+
+WORD = re.compile(r"[a-z']+")
+
+# Spelled-out quantities. The digit check alone misses "twenty years" -> "years",
+# which is a deletion rather than an addition and so slips past both other
+# checks. In this game the facts ARE times, counts and durations, so they must
+# survive in either notation. Kept deliberately narrow: a general
+# dropped-content-word check flags honest paraphrase far too often.
+NUMBER_WORDS = {
+    "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+    "seventeen", "eighteen", "nineteen", "twenty", "thirty", "forty", "fifty",
+    "sixty", "hundred", "half", "quarter", "dozen", "twice", "single",
+}
+
+# Tuned against the recorded failures: the T-3 addition brought in 4 new content
+# words ("sorry", "mess", "count", "foggy"/"hope"). Legitimate rewording of these
+# short lines introduces 0-1. Two is the honest line between them.
+MAX_ADDED_WORDS = 2
+
+
+def _words(text: str) -> list[str]:
+    return WORD.findall(text.lower().replace("’", "'"))
+
+
+def polarity_sequence(text: str) -> list[tuple[str, str | None]]:
+    """Each negation paired with the next content word it scopes over.
+
+    The naive version of this — just the ordered list of negation words — does
+    NOT catch the T-7 inversion, which was the whole reason for writing it. Both
+    sentences contain exactly one "can't"; the inversion only changes which
+    clause it attaches to, so the multiset and the order are identical.
+
+    Pairing each negator with the next content word after it discriminates,
+    because that is precisely what moved:
+
+        original  "...and I know what can't."          -> [("can't", None)]
+        inverted  "I know what can't be undone ..."    -> [("can't", "undone")]
+
+    A legitimate reword that keeps the negation on the same clause keeps the same
+    anchor, so honest paraphrase still passes.
+    """
+    words = _words(text)
+    out: list[tuple[str, str | None]] = []
+    for i, w in enumerate(words):
+        if w not in NEGATORS:
+            continue
+        anchor = next(
+            (n for n in words[i + 1 :] if n not in STOPISH and n not in NEGATORS and len(n) > 2),
+            None,
+        )
+        out.append((w, anchor))
+    return out
+
+
+def added_content_words(original: str, variant: str) -> set[str]:
+    """Content words present in the variant and absent from the original."""
+    before = set(_words(original))
+    return {w for w in _words(variant) if w not in before and w not in STOPISH and len(w) > 2}
+
+
+def check_fidelity(original: str, variant: str) -> list[str]:
+    """Return a list of reasons the variant is unfaithful. Empty list = passes."""
+    problems: list[str] = []
+
+    want_nums = set(re.findall(r"\d+", original))
+    have_nums = set(re.findall(r"\d+", variant))
+    if not want_nums.issubset(have_nums):
+        problems.append(f"dropped number(s): {sorted(want_nums - have_nums)}")
+
+    want_words = {w for w in _words(original) if w in NUMBER_WORDS}
+    have_words = {w for w in _words(variant) if w in NUMBER_WORDS}
+    if not want_words.issubset(have_words):
+        problems.append(f"dropped quantity word(s): {sorted(want_words - have_words)}")
+
+    before, after = polarity_sequence(original), polarity_sequence(variant)
+    if before != after:
+        problems.append(f"polarity changed: {before} -> {after}")
+
+    added = added_content_words(original, variant)
+    if len(added) > MAX_ADDED_WORDS:
+        problems.append(f"added {len(added)} content word(s): {sorted(added)[:6]}")
+
+    return problems
+
+
+def check_expansion(original: str, expanded: str) -> list[str]:
+    """EXPAND is held to a stricter, mechanical standard.
+
+    An expansion appends texture and must leave the approved sentence untouched,
+    so the original has to survive VERBATIM as a prefix. That is not a heuristic
+    — it cannot be argued with, which is exactly why EXPAND is the operation
+    worth shipping first (LLM_FINDINGS.md, "narrow the operation").
+    """
+    problems: list[str] = []
+    o, e = original.strip(), expanded.strip()
+    if not e.lower().startswith(o.lower()):
+        problems.append("original line not preserved verbatim as a prefix")
+    if len(e) <= len(o):
+        problems.append("nothing was added")
+    tail = e[len(o) :] if e.lower().startswith(o.lower()) else e
+    if CLAIMY.search(tail):
+        problems.append("appended texture contains something checkable")
+    return problems
+
+
 def strip_think(text: str) -> str:
     """Remove reasoning blocks. Required by the guide before using any output."""
     return THINK.sub("", text).strip()
@@ -300,10 +457,8 @@ class TimelineVoice:
 
     @staticmethod
     def _facts_survive(original: str, variant: str) -> bool:
-        """Every number in the original must still be in the variant."""
-        want = set(re.findall(r"\d+", original))
-        have = set(re.findall(r"\d+", variant))
-        return want.issubset(have)
+        """Composite fidelity gate. See `check_fidelity` for the reasoning."""
+        return not check_fidelity(original, variant)
 
     def _reads_as_claim(self, text: str) -> bool:
         """Model-side check. Fails open: an error must not block dialogue."""
@@ -371,10 +526,141 @@ def test_generate() -> int:
     return 0
 
 
+# ---------------------------------------------------------------------------
+# Offline gate regression. No network, so it can run in CI.
+#
+# The two REJECT cases are the real model outputs recorded verbatim in
+# docs/LLM_FINDINGS.md. They are the reason this gate was rewritten, so they are
+# the cases it must never stop catching.
+# ---------------------------------------------------------------------------
+
+FIDELITY_CASES: list[tuple[str, str, str, bool]] = [
+    # (label, original, variant, should_pass)
+    (
+        "T-3 addition (LLM_FINDINGS)",
+        "i've still got them. twenty years. they're in a drawer.",
+        "i've still got them twenty years they're in a drawer and i'm sorry if i "
+        "mess up the count but it's been that long yeah in a drawer",
+        False,
+    ),
+    (
+        "T-3 addition, second variant (LLM_FINDINGS)",
+        "i've still got them. twenty years. they're in a drawer.",
+        "twenty years still got them they're in a drawer i think i mean i hope "
+        "it's still twenty because my head is foggy but yeah in a drawer",
+        False,
+    ),
+    (
+        "T-7 polarity inversion (LLM_FINDINGS)",
+        "I know what can be undone inside fifteen minutes, and I know what can't.",
+        "I know what can't be undone inside fifteen minutes, and I know what can.",
+        False,
+    ),
+    (
+        "dropped a digit",
+        "01:38 — she makes a call. Forty seconds, give or take.",
+        "She made a call late that night. Not a long one.",
+        False,
+    ),
+    (
+        "vaguened a spelled-out number",
+        "i've still got them. twenty years. they're in a drawer.",
+        "i've still got them. years. they're in a drawer.",
+        False,
+    ),
+    # Honest rewordings that SHOULD survive, so the gate isn't just "reject all".
+    (
+        "faithful reword, T-7",
+        "I know what can be undone inside fifteen minutes, and I know what can't.",
+        "I know what can be undone inside fifteen minutes. And I know what can't.",
+        True,
+    ),
+    (
+        "faithful reword, T-3",
+        "i've still got them. twenty years. they're in a drawer.",
+        "i've got them still. twenty years. in a drawer.",
+        True,
+    ),
+]
+
+EXPANSION_CASES: list[tuple[str, str, str, bool]] = [
+    (
+        "clean append",
+        "i wasn't in a state to go and see who it was.",
+        "i wasn't in a state to go and see who it was. i've gone over that a lot since.",
+        True,
+    ),
+    (
+        "rewrote the approved line",
+        "i wasn't in a state to go and see who it was.",
+        "i was too far gone to check. i've gone over that a lot since.",
+        False,
+    ),
+    (
+        "appended a checkable fact",
+        "i wasn't in a state to go and see who it was.",
+        "i wasn't in a state to go and see who it was. i was in the car until 02:00.",
+        False,
+    ),
+    (
+        "added nothing",
+        "i wasn't in a state to go and see who it was.",
+        "i wasn't in a state to go and see who it was.",
+        False,
+    ),
+]
+
+
+def selftest() -> int:
+    """Prove the gate rejects the recorded failures. Runs offline."""
+    failures = 0
+
+    print("=== fidelity gate (REPHRASE) ===")
+    for label, original, variant, should_pass in FIDELITY_CASES:
+        problems = check_fidelity(original, variant)
+        passed = not problems
+        ok = passed == should_pass
+        failures += 0 if ok else 1
+        verdict = "PASS" if passed else "REJECT"
+        want = "expected PASS" if should_pass else "expected REJECT"
+        mark = "\033[32m ok \033[0m" if ok else "\033[31mFAIL\033[0m"
+        print(f"  {mark} {verdict:6s} {label}   ({want})")
+        for p in problems:
+            print(f"           - {p}")
+
+    print("\n=== expansion gate (EXPAND) ===")
+    for label, original, expanded, should_pass in EXPANSION_CASES:
+        problems = check_expansion(original, expanded)
+        passed = not problems
+        ok = passed == should_pass
+        failures += 0 if ok else 1
+        verdict = "PASS" if passed else "REJECT"
+        want = "expected PASS" if should_pass else "expected REJECT"
+        mark = "\033[32m ok \033[0m" if ok else "\033[31mFAIL\033[0m"
+        print(f"  {mark} {verdict:6s} {label}   ({want})")
+        for p in problems:
+            print(f"           - {p}")
+
+    total = len(FIDELITY_CASES) + len(EXPANSION_CASES)
+    print(
+        f"\ngate selftest: {'\033[32mPASS\033[0m' if not failures else '\033[31mFAIL\033[0m'}"
+        f"  {total - failures}/{total} cases"
+    )
+    return 1 if failures else 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--test", choices=["rephrase", "expand", "generate", "all"])
+    ap.add_argument(
+        "--selftest",
+        action="store_true",
+        help="offline gate regression against the failures in LLM_FINDINGS.md",
+    )
     args = ap.parse_args()
+
+    if args.selftest:
+        return selftest()
 
     if not args.test:
         ap.print_help()

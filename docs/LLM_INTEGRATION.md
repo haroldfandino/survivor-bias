@@ -1,14 +1,54 @@
 # LLM Voice Integration — Implementation Guide
 
-> **STATUS: PROPOSAL. None of this is wired up.**
+> ## STATUS: SUPERSEDED. Do not implement the runtime patterns below.
 >
-> `tools/llm_voice.py` exists and runs standalone. The app does not call it, and
-> the components and JSON manifests named below do not exist. Every code block
-> here is a sketch of intended shape, not a description of the codebase — the
-> `fetchRephrase` / `fetchExpand` / `fetchGenerate` helpers are invented for
-> illustration.
+> This document proposed calling the model **at runtime**, from React components,
+> while the player waits. Three independent findings killed that, and each one is
+> sufficient on its own:
 >
-> Anything shipped and verified is in `CHAPTERS.md` instead.
+> **1. Latency.** `docs/LLM_FINDINGS.md` measured **64 s for a ten-token reply**
+> from the small model, warm, on a trivial prompt. A rephrase cannot happen while
+> a bubble is landing. Every `await fetch…()` sketch below is unshippable on
+> timing alone.
+>
+> **2. The credential cannot ship.** The game is a **static build with no
+> backend** — Vite output on Vercel's CDN. Rupert requires
+> `Authorization: Bearer sk-…`. A call from the browser means that key in the
+> JS bundle, and **the repo is public**. That is an internal credential leak, not
+> a configuration detail. A runtime LLM would first need a Vercel Function to
+> proxy it with the key as a server-side env var — a backend this game currently
+> does not have and does not otherwise need.
+>
+> **3. The gates proposed here don't work.** §"Gate 1: Semantic Similarity"
+> recommends TF-IDF cosine at a 0.80 threshold. Cosine on a bag of words is
+> near-blind to negation, so it would have **passed the semantic inversion**
+> recorded in `LLM_FINDINGS.md` — `"what can be undone … and what can't"` becoming
+> `"what can't be undone … and what can"`. A gate that admits the exact failure it
+> was written to prevent is worse than no gate, because it manufactures
+> confidence.
+>
+> ### What replaced it
+>
+> The model is a **build-time drafting tool**, not a runtime feature:
+>
+> - `tools/llm_voice.py --selftest` — the real fidelity gate, checking polarity
+>   scope, content additions, and dropped quantities in either notation. It runs
+>   **offline** and is part of `npm run gate`, with the two recorded failures as
+>   permanent regression cases.
+> - Accepted output is **pasted into `story/*.ink` by a human**, so there is one
+>   source of truth and the existing story gate covers it automatically. No
+>   parallel variant manifest, no second canon.
+> - The property this preserves is the one the whole project rests on: *every line
+>   that reaches a player was read by someone first.*
+>
+> Also note §2 below proposes filing the *expanded* text as the official claim.
+> Don't. Claim text is what the player quotes and what `contest()` keys off —
+> rewriting it reaches into the puzzle. If an expansion is accepted it belongs in
+> the conversation as an extra authored line, never as the claim.
+>
+> The sections below are kept as the record of what was considered and why it was
+> rejected. `fetchRephrase` / `fetchExpand` / `fetchGenerate` never existed.
+> Anything shipped and verified is in `CHAPTERS.md`.
 
 ## Overview
 
