@@ -149,7 +149,9 @@ function freshStory() {
  * pushes `[...made, j]` — the choices actually taken so far plus one
  * alternative — so earlier decisions are never dropped.
  */
-function walk(entry) {
+let preludeKnot = '';
+
+function walk(entry, prelude = []) {
   const stack = [[]];
   const branched = new Set();
 
@@ -164,6 +166,14 @@ function walk(entry) {
     const made = [];
     const s = freshStory();
     try {
+      // Run any prelude quotes first so state-gated beats become reachable.
+      // These use real story paths — no synthetic variable pokes — so the state
+      // the walker arrives in is state the player could actually be in.
+      for (const step of prelude) {
+        s.variablesState['quoting'] = step;
+        s.ChoosePathString(step.startsWith('C_') ? preludeKnot : step);
+        while (s.canContinue) s.Continue();
+      }
       s.ChoosePathString(entry);
     } catch (err) {
       errors.push(`entry knot '${entry}' is not reachable: ${err.message ?? err}`);
@@ -236,6 +246,29 @@ function walk(entry) {
 // Entry points to exercise. boot plus every reachable contact knot.
 const entries = ['boot', ...new Set(requiredKnots)];
 for (const e of entries) walk(e);
+
+/**
+ * Second-visit surfaces.
+ *
+ * Some beats only exist the *next* time the player opens a thread, and only
+ * once the story is in a particular state — the ally attack (t3_turn) needs two
+ * contests behind it, the opponent's counterattack (t12_counter) needs one of
+ * his claims discredited. The plain walk above always starts from a fresh
+ * story, so it can never see either, and the gate reported the claim behind the
+ * ally attack as an orphan.
+ *
+ * Rather than poke variables, each of these declares the quote knots to run
+ * first. That is exactly what the player does to get there, so anything the
+ * walker finds past the prelude is genuinely reachable in play.
+ */
+const RETURN_ENTRIES = [
+  { knot: 't3_return', via: 't3_quote', quotes: ['C_CAR_MOVED', 'C_FORD_LIGHT'] },
+  { knot: 't12_return', via: 't3_quote', quotes: ['C_CAR_MOVED'] },
+];
+for (const r of RETURN_ENTRIES) {
+  preludeKnot = r.via;
+  walk(r.knot, r.quotes);
+}
 
 // ---------------------------------------------------------------------------
 // Quote coverage.
@@ -333,7 +366,7 @@ const metric = [
   `${orphans.length} orphan`,
   `${paths} paths walked`,
   `${quotePairs} quote pairs`,
-  `${endings.size}/${entries.length} entries terminate`,
+  `${endings.size}/${entries.length + RETURN_ENTRIES.length} entries terminate`,
 ].join(' · ');
 
 console.log(`\nstory gate: ${errors.length === 0 ? '\x1b[32mPASS\x1b[0m' : '\x1b[31mFAIL\x1b[0m'}`);

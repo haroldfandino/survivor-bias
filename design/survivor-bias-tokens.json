@@ -1,7 +1,6 @@
 {
   "$name": "SURVIVOR BIAS — style lock v1",
   "$note": "Channel convention: cf. iio-games/Crownbane/UI-UX/V01/crownbane-tokens.json. Consumed by src/index.css as CSS custom properties. Change here, not in components.",
-
   "chrome": {
     "$note": "The app the player is holding. Cold, institutional, forensic — deliberately NOT iMessage.",
     "bg": "#0B0D10",
@@ -18,46 +17,79 @@
     "ok": "#4E8C6A",
     "warn": "#C89A3C"
   },
-
   "timelines": {
     "$note": "One grade per branch. This is the primary visual language — players learn to read a timeline by its palette before they read its name. Applied as a CSS filter + duotone over all portraits and evidence images from that branch.",
     "prime": {
       "label": "YOU",
       "key": "#E4E6EA",
       "grade": "neutral",
-      "duotone": ["#0B0D10", "#E4E6EA"],
+      "duotone": [
+        "#0B0D10",
+        "#E4E6EA"
+      ],
       "note": "Ungraded. The player's own branch is the only one that looks like plain reality."
+    },
+    "t2": {
+      "label": "TIMELINE-2",
+      "key": "#A8C8DC",
+      "grade": "ice",
+      "duotone": [
+        "#0A1016",
+        "#C4DCEA"
+      ],
+      "note": "Pale, cold, clear. The one who put it down and went calm about it. Chosen over violet and rose, which both COLLAPSE against the other grades under dichromacy (deltaE 7.1 and 9.4) - see docs/STRUCTURE_TRUBY.md."
     },
     "t3": {
       "label": "TIMELINE-3",
       "key": "#E08B3C",
       "grade": "sodium-orange",
-      "duotone": ["#160D06", "#F0A96B"],
+      "duotone": [
+        "#160D06",
+        "#F0A96B"
+      ],
       "note": "Streetlight sodium. Night exteriors, wet asphalt, car interiors."
     },
     "t7": {
       "label": "TIMELINE-7",
       "key": "#5E9C8A",
       "grade": "hospital-green",
-      "duotone": ["#08110F", "#8FC4B4"],
+      "duotone": [
+        "#08110F",
+        "#8FC4B4"
+      ],
       "note": "Fluorescent institutional green. Corridors, waiting rooms, paperwork."
     },
     "t9": {
       "label": "TIMELINE-9",
       "key": "#C9BFA8",
       "grade": "paper",
-      "duotone": ["#14120E", "#DCD3BE"],
+      "duotone": [
+        "#14120E",
+        "#DCD3BE"
+      ],
       "note": "Bone/paper. Desaturated on purpose: he was never at the party, so he reads as a document rather than a fourth saturated hue. Separated from the others on LIGHTNESS, which is the axis that survives dichromacy."
+    },
+    "t11": {
+      "label": "TIMELINE-11",
+      "key": "#ECBC30",
+      "grade": "brass",
+      "duotone": [
+        "#14100A",
+        "#E8C878"
+      ],
+      "note": "Tarnished brass. Twenty years of a folder that never closed, and a bench with a plaque on it instead of a stone. Was rust #9C5433 until the a11y pass: rust fails WCAG AA on both backgrounds (3.46:1 and 3.25:1), and EVERY rust or ochre that does pass AA collapses against the alarm red #E56A5A under protanopia (deltaE 7). Brass is the global optimum for a sixth key over the whole sRGB space under that constraint - 10.28:1 contrast, worst-case deltaE 19.3 across all CVD simulations, which is better separated than the existing tightest pair (t7/t9 at 16.2)."
     },
     "t12": {
       "label": "TIMELINE-12",
       "key": "#6B90C4",
       "grade": "blue-hour",
-      "duotone": ["#070B12", "#7E9EC9"],
+      "duotone": [
+        "#070B12",
+        "#7E9EC9"
+      ],
       "note": "Pre-dawn cold. The one that got furthest away from that night."
     }
   },
-
   "type": {
     "$note": "Two faces only. UI is a system stack for that 'real app' read; evidence documents use a mono so scans/reports feel machine-produced.",
     "ui": "ui-sans-serif, -apple-system, 'Segoe UI', Roboto, sans-serif",
@@ -68,13 +100,24 @@
       "name": "0.8125rem",
       "title": "1.0625rem"
     },
-    "leading": { "msg": "1.45", "meta": "1.2" }
+    "leading": {
+      "msg": "1.45",
+      "meta": "1.2"
+    }
   },
-
-  "space": { "gutter": "0.75rem", "bubble-x": "0.75rem", "bubble-y": "0.5rem", "stack": "0.375rem", "group": "1.25rem" },
-
-  "radius": { "bubble": "1.125rem", "bubble-tail": "0.25rem", "card": "0.5rem", "avatar": "9999px" },
-
+  "space": {
+    "gutter": "0.75rem",
+    "bubble-x": "0.75rem",
+    "bubble-y": "0.5rem",
+    "stack": "0.375rem",
+    "group": "1.25rem"
+  },
+  "radius": {
+    "bubble": "1.125rem",
+    "bubble-tail": "0.25rem",
+    "card": "0.5rem",
+    "avatar": "9999px"
+  },
   "grain": {
     "$note": "Everything the player sees is mediated. Grain + aberration are global, not per-image, so generated-art drift reads as transmission noise rather than error.",
     "opacity": 0.055,
@@ -82,7 +125,6 @@
     "aberration-px": 0.6,
     "scanline-opacity": 0.02
   },
-
   "motion": {
     "$note": "Restrained. The only fast thing in the app should be a message arriving.",
     "msg-in": "180ms cubic-bezier(0.16, 1, 0.3, 1)",

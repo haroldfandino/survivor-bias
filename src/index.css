@@ -21,9 +21,11 @@
 
   /* One key colour per branch — the primary visual language. */
   --color-t-prime: #e4e6ea;
+  --color-t2: #a8c8dc;
   --color-t3: #e08b3c;
   --color-t7: #5e9c8a;
   --color-t9: #c9bfa8;
+  --color-t11: #ECBC30;
   --color-t12: #6b90c4;
 
   --radius-bubble: 1.125rem;

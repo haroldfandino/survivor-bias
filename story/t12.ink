@@ -18,7 +18,7 @@
 
 === t12_open ===
 { finished: -> gone }
-{ t12_open_seen: -> t12_hub }
+{ t12_open_seen: -> t12_return }
 ~ t12_open_seen = true
 
 You've spoken to both of them already. # from: t12 # delay: 1000
@@ -34,6 +34,58 @@ I can tell. You're asking in their order. # from: t12 # delay: 1100
 - Let's be clear about something before we start. # from: t12 # delay: 1050
 I am the only one of us who is alright. # from: t12 # delay: 1200
 That should tell you whose account to weight. # from: t12 # delay: 1250
+-> t12_hub
+
+// ---------------------------------------------------------------------------
+// Re-entry gate. The counterattack fires the next time the player opens the
+// thread after discrediting one of his claims — not on a menu, because being
+// counterattacked is not something anyone volunteers for.
+// ---------------------------------------------------------------------------
+=== t12_return ===
+{ (contested ? C_CAR_MOVED) or (contested ? C_FORD_LIGHT) or (contested ? C_WHO_DROVE):
+    { not t12_countered: -> t12_counter }
+}
+-> t12_hub
+
+// ---------------------------------------------------------------------------
+// OPPONENT'S COUNTERATTACK (Truby 11). He does not defend the claim. He goes
+// after the player's SOURCES, and he is not wrong — that is the whole problem.
+// Everything he says here is true. He is using true things to protect a lie.
+//
+// It costs the player something real: he contests C_CAR_KEYS, a TRUE claim.
+// After this, "contested" stops meaning "discredited" and starts meaning
+// "disputed", which is what it always meant.
+// ---------------------------------------------------------------------------
+=== t12_counter ===
+~ t12_countered = true
+Before you go any further. # from: t12 # delay: 1300
+Let's look at what you've actually got. # from: t12 # delay: 1300
+{ has(C_CALL_RANG_OUT) or has(C_T9_LAUNDERED):
+    You've been taking evidence off a man who wasn't there. # from: t12 # delay: 1700
+    He'll have told you it's sourced. It is. It's sourced from me. # from: t12 # delay: 1800
+    You've been hearing me twice and counting it as two people. # from: t12 # delay: 1900
+}
+{ has(C_T3_WAS_WARNED):
+    And the other one had this exact conversation, on this exact night, and put the phone in his coat. # from: t12 # delay: 2200
+    That's your witness. # from: t12 # delay: 1200
+- else:
+    And the other one was in a car with a bottle in it. # from: t12 # delay: 1700
+}
+
+    * [You're still lying.]
+    Probably. # from: t12 # delay: 900
+    That doesn't make them reliable. Both things get to be true. # from: t12 # delay: 1700
+    * [What's your point?]
+    That you're not verifying. You're collecting. # from: t12 # delay: 1600
+
+- The keys. # from: t12 # delay: 1000
+~ contest(C_CAR_KEYS)
+He says he had them in his jacket in the morning. Nobody else was in that jacket. # from: t12 # delay: 1900
+There is no version of tonight where that is checkable, and you have been treating it as the floor. # from: t12 # delay: 2100
+I'm not asking you to believe me. # from: t12 # delay: 1300
+I'm asking you to notice that you've stopped asking them how they know. # from: t12 # delay: 2000
+~ tick()
+~ tick()
 -> t12_hub
 
 === t12_hub ===
@@ -162,6 +214,31 @@ And I'd like you to understand that I know exactly how that sounds, and I'm sayi
         He was in a car forty feet away with the windows up. # from: t12 # delay: 1300
         He saw two shapes. He's spent twenty years deciding what they were saying. # from: t12 # delay: 1550
 
+    - quoting == "C_CALL_RANG_OUT":
+        Then he'll have told you it rang out. # from: t12 # delay: 1300
+        Everyone's rang out. That's what the phone did that night, in every one of these. # from: t12 # delay: 1800
+        It's the one detail none of us had to be told. # from: t12 # delay: 1500
+
+    - quoting == "C_T9_LAUNDERED":
+        Yes. He has that from 2011. # from: t12 # delay: 1300
+        From me, in 2011. # from: t12 # delay: 1100
+        I'd assumed you'd work that out later, and I'd assumed it would matter more. # from: t12 # delay: 1900
+
+    - quoting == "C_T3_WAS_WARNED":
+        I didn't know that. # from: t12 # delay: 1200
+        That is the first new thing anyone has said to me in nineteen years. # from: t12 # delay: 1800
+        And you understand what it means. It means this isn't a chance. It's a fixture. # from: t12 # delay: 2000
+
+    - quoting == "C_COUNT_ASSUMES":
+        Who told you that. # from: t12 # delay: 1100
+        The eleventh. # from: t12 # delay: 900
+        I've spoken to him twice and I've never once been able to finish it. # from: t12 # delay: 1700
+        He's right about the arithmetic and he is not going to be right about her. # from: t12 # delay: 2000
+
+    - quoting == "C_ROW_DAY_BEFORE":
+        The Tuesday. # from: t12 # delay: 900
+        Yes. All of us. It's the only thing in this that isn't anybody's fault and it's the only thing I still can't read. # from: t12 # delay: 2100
+
     - quoting == "C_TIME_LEFT":
         That much is true. # from: t12 # delay: 800
         It's the only thing all three of us agree on, which should worry you more than it does. # from: t12 # delay: 1600
@@ -178,3 +255,4 @@ VAR t12_asked_ford = false
 VAR t12_asked_home = false
 VAR t12_asked_voice = false
 VAR t12_asked_gap = false
+VAR t12_countered = false

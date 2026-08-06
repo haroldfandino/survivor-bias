@@ -467,11 +467,128 @@ run('TIMELINE-9 — he chose, where the others could not', (t) => {
 });
 
 // ===========================================================================
+// The two new selves, and the two Truby beats they were written to fill.
+// See docs/STRUCTURE_TRUBY.md.
+// ===========================================================================
+
+run('TIMELINE-2 — the moral opponent attacks the premise, not the plan', (t) => {
+  // His moral attack is gated on the player holding three claims: he will not
+  // argue with someone who has not started yet.
+  t.open('t3_open', 'TIMELINE-3');
+  t.pick('I know who you are.');
+  t.pick('The 14th.');
+  t.pick('You had her keys.');
+  t.pick('Tell me about the ford.');
+  t.expect('three claims held', t.claims.size >= 3);
+
+  t.open('t2_open', 'TIMELINE-2');
+  t.pick('Why not?');
+  t.expect('the moral question is on offer', t.offered('Should I be doing this'));
+  t.pick('Should I be doing this at all?');
+  t.pick("You think they're using me.");
+  t.expect('he attacks the reason, not the evidence', t.said('know which of those two'));
+  t.expect('he gives no claims — refusing to collect is his position', t.claims.size === 3);
+  t.expect('and he never contests anything', !t.contested('C_CAR_KEYS'));
+});
+
+run('TIMELINE-2 — he will not join the prosecution', (t) => {
+  // Once the gap is contested he knows exactly who is at fault, and refuses.
+  t.open('t7_open', 'TIMELINE-7');
+  t.pick("He said it's happening tonight.");
+  t.pick('Walk me through that night.');
+  t.pick("You've accounted for every minute but fifteen.");
+  t.open('t3_open', 'TIMELINE-3');
+  t.pick('I know who you are.');
+  t.pick('The 14th.');
+  t.pick('Where were you at quarter to two?');
+  t.expect('the gap is contested', t.contested('C_TIME_GAP'));
+
+  t.open('t2_open', 'TIMELINE-2');
+  t.pick('You knew it was me?');
+  t.expect('the blame thread has opened', t.offered('One of you is at fault'));
+  t.pick('One of you is at fault.');
+  t.pick('You know which one?');
+  t.pick("That's not forgiveness, that's just quitting.");
+  t.expect('he refuses', t.said('build a case against a nineteen-year-old'));
+  t.expect('and he does not pretend to have won it', t.said('never once won it cleanly'));
+});
+
+run('TIMELINE-11 — the visit to death, and the arithmetic', (t) => {
+  t.open('t11_open', 'TIMELINE-11');
+  t.pick('What do you mean, found?');
+  t.expect('no body, so no date', t.said("There's a bench"));
+
+  t.pick('The others say eleven of twelve.');
+  t.expect('the count itself becomes evidence', t.claims.has('C_COUNT_ASSUMES'));
+  t.pick('Do you believe that?');
+
+  t.pick('Are you still looking?');
+  t.expect('twenty years has a reference number', t.said('04/JX/2211'));
+
+  t.expect('the low point is now reachable', t.offered('Is not knowing worse'));
+  t.pick('Is not knowing worse?');
+  t.pick('Is it worse?');
+  t.expect('he answers it', t.said('Both of those are worse than knowing'));
+  t.expect('and he pushes the player to decide anyway', t.said('Deciding wrong is survivable'));
+});
+
+run('ATTACK BY ALLY — T-3 turns once the player has called two people liars', (t) => {
+  t.open('t3_open', 'TIMELINE-3');
+  t.pick('I know who you are.');
+  t.pick('The 14th.');
+
+  // Two of T-12's fabrications, quoted back at T-3, are two contests. Held
+  // directly rather than fetched from T-12 so the scenario stays about T-3.
+  t.claims.set('C_CAR_MOVED', { text: 'x', source: 't12', contested: false });
+  t.claims.set('C_FORD_LIGHT', { text: 'x', source: 't12', contested: false });
+  t.quote('C_CAR_MOVED', 't3_quote', 'T-3');
+  t.quote('C_FORD_LIGHT', 't3_quote', 'T-3');
+  t.expect('both are contested', t.contested('C_CAR_MOVED') && t.contested('C_FORD_LIGHT'));
+  t.expect('he has not turned yet', !t.said('not one of your sources'));
+
+  // Reopening the thread is what triggers it — it is not on the menu.
+  t.open('t3_open', 'TIMELINE-3 (reopened)');
+  t.expect('the attack lands on reopen', t.said('not one of your sources'));
+  t.pick("I'm trying to work out what's true.");
+  t.pick("You'd do the same as me.");
+  t.expect('the ally attack costs the hero his certainty', t.claims.has('C_T3_WAS_WARNED'));
+  t.pick('What did you do?');
+  t.expect('he did nothing', t.said('i put the phone in my coat'));
+});
+
+run('COUNTERATTACK — T-12 goes after the sources, and is not wrong', (t) => {
+  t.open('t12_open', 'TIMELINE-12');
+  t.pick("They're trying to help.");
+  t.pick('What do you remember?');
+  t.expect('the fabrication is on the table', t.claims.has('C_CAR_MOVED'));
+
+  // Discredit it at T-3, then come back.
+  t.open('t3_open', 'TIMELINE-3');
+  t.pick('I know who you are.');
+  t.pick('The 14th.');
+  t.pick('You had her keys.');
+  t.expect('the keys are the floor of the case', t.claims.has('C_CAR_KEYS'));
+  t.quote('C_CAR_MOVED', 't3_quote', 'T-3');
+  t.expect('discredited', t.contested('C_CAR_MOVED'));
+
+  t.open('t12_open', 'TIMELINE-12 (reopened)');
+  t.expect(
+    'he counterattacks instead of conceding',
+    t.said("what you've actually got") && t.said('was in a car with a bottle'),
+  );
+  t.pick("You're still lying.");
+  t.expect('and lands it on the player', t.said('stopped asking them how they know'));
+  t.expect('he admits it without giving ground', t.said('Both things get to be true'));
+  t.expect('and he turns the mechanic on the player', t.contested('C_CAR_KEYS'));
+  t.expect('a contested claim is disputed, not false', t.claims.has('C_CAR_KEYS'));
+});
+
+// ===========================================================================
 
 if (failures) {
   console.error(`\n\x1b[31mplaytest FAIL\x1b[0m — ${failures} scenario(s) failed`);
   process.exit(1);
 }
 console.log(
-  '\n\x1b[32mplaytest PASS\x1b[0m — 13 scenarios: 3 endings, 3 prequels, codas, and TIMELINE-9',
+  '\n\x1b[32mplaytest PASS\x1b[0m — 18 scenarios: 3 endings, 3 prequels, codas, and the six selves',
 );

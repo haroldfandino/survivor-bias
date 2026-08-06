@@ -157,6 +157,14 @@ You are already looking for your keys, because in this timeline you have them. #
 - # from: system # delay: 2000 # screen: convergence
 
 They were only ever reachable because they were the ones who lost her. # from: system # delay: 3000
+{ t11_open_seen:
+    Except one, and his didn't go out like the others. His just stopped being anywhere, which is what it always was. # from: system # delay: 3200
+}
+{ t2_open_seen:
+    TIMELINE-2 is the last to go, and he gets a sentence out first. # from: system # delay: 2800
+    I'm glad. I want you to know I'm glad, and that I still think you did it for you. # from: t2 # delay: 3000
+    Both of those. All the way down. # from: t2 # delay: 2400
+}
 Forty seconds. That's all the difference ever was. # from: system # delay: 2800
 Somebody picked up. # from: system # delay: 2600
 -> END
@@ -188,6 +196,13 @@ TIMELINE-7 sends you a timeline. It's very precise. He has already worked out th
 TIMELINE-3 says he's glad it wasn't just him. # from: system # delay: 2600
 TIMELINE-9 says nothing for two days, and then sends one line: *welcome.* # from: system # delay: 3000
 TIMELINE-12 says: *now you understand.* # from: system # delay: 2600
+{ t11_open_seen:
+    TIMELINE-11 asks whether yours was found. # from: system # delay: 2800
+    You tell him yes, and he says that's good, and he means it, and then he asks for the date so he can put it in the folder. # from: system # delay: 3200
+}
+{ t2_open_seen:
+    TIMELINE-2 doesn't send a message. He calls, twice, and you don't pick up either of those. # from: system # delay: 3200
+}
 And he is kind about it. That's the part you won't get over. # from: system # delay: 2800
 He was never trying to hurt you. He was trying to bring you home. # from: system # delay: 3000
 -> END
@@ -221,7 +236,19 @@ You couldn't say afterwards whether that was a decision. # from: system # delay:
 In the morning there's one message. # from: system # delay: 2400
 it's alright # from: t3 # delay: 2600
 i didn't pick up either # from: t3 # delay: 2400
+{ has(C_T3_WAS_WARNED):
+    i told you. i had a tonight and i put the phone in my coat. i'm not going to pretend i thought you'd be different # from: t3 # delay: 3400
+}
 none of us did. not one. that's the whole thing. that's all any of us are # from: t3 # delay: 3000
+{ t11_open_seen:
+    Later, TIMELINE-11 sends the reference number for his and asks if you want one for yours. # from: system # delay: 3200
+    He says it helps to have something to ring about in March. # from: system # delay: 2800
+}
+{ t2_open_seen:
+    TIMELINE-2 sends nothing that night, or that week. # from: system # delay: 2800
+    Four years from now he'll message on a Tuesday to say he hasn't thought about the ford in eight days, and that he didn't panic about that, and that it starts there. # from: system # delay: 3600
+    He won't say it like it's advice. That's the only reason it lands. # from: system # delay: 3000
+}
 -> END
 
 // ---------------------------------------------------------------------------

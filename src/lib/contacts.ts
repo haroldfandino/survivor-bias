@@ -10,6 +10,15 @@ import { CHAPTERS } from './chapters';
  */
 export const CONTACTS: Contact[] = [
   {
+    id: 't2',
+    label: 'TIMELINE-2',
+    blurb: 'the one who forgave himself',
+    tint: 'var(--color-t2)',
+    entry: 't2_open',
+    quoteEntry: 't2_quote',
+    reachable: true,
+  },
+  {
     id: 't3',
     label: 'TIMELINE-3',
     blurb: 'the one who stayed',
@@ -34,6 +43,15 @@ export const CONTACTS: Contact[] = [
     tint: 'var(--color-t9)',
     entry: 't9_open',
     quoteEntry: 't9_quote',
+    reachable: true,
+  },
+  {
+    id: 't11',
+    label: 'TIMELINE-11',
+    blurb: 'the one who never found out',
+    tint: 'var(--color-t11)',
+    entry: 't11_open',
+    quoteEntry: 't11_quote',
     reachable: true,
   },
   {

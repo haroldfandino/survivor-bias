@@ -21,7 +21,7 @@
 
 === t3_open ===
 { finished: -> gone }
-{ t3_open_seen: -> t3_hub }
+{ t3_open_seen: -> t3_return }
 ~ t3_open_seen = true
 
 oh # from: t3 # delay: 700
@@ -53,6 +53,59 @@ listen. it hasn't happened yet for you. tonight. it's tonight # from: t3 # delay
 ~ gain(C_TIME_LEFT, "Nell leaves the house on foot between 01:20 and 02:05.", "t3")
 she leaves the house at like half one. on foot. down the river road # from: t3 # delay: 1500
 i've had twenty years to think about that road # from: t3 # delay: 1300
+~ tick()
+-> t3_hub
+
+// ---------------------------------------------------------------------------
+// Re-entry. Every reopen of the thread comes through here so the ally attack
+// lands on its own schedule rather than waiting to be picked off a menu — the
+// player would never choose "let him turn on me".
+// ---------------------------------------------------------------------------
+=== t3_return ===
+{ count_contested() >= 2 and not t3_turned: -> t3_turn }
+-> t3_hub
+
+// ---------------------------------------------------------------------------
+// ATTACK BY ALLY (Truby 13). The warmest character in the game has, until now,
+// cost the player nothing. Two contests in means the player has been calling
+// people liars all night, and he has worked out he is one of the people.
+//
+// The turn is not really about that. It is about the fact that the player gets
+// a tonight and he doesn't — and then it goes somewhere worse, because he had
+// one.
+// ---------------------------------------------------------------------------
+=== t3_turn ===
+~ t3_turned = true
+can i say something # from: t3 # delay: 1300
+you're doing that thing where you ask me something and then you go quiet and then you come back with what he said # from: t3 # delay: 2100
+i'm not one of your sources # from: t3 # delay: 1400
+
+    * [I'm trying to work out what's true.]
+    yeah # from: t3 # delay: 700
+    yeah i know what you're trying to do # from: t3 # delay: 900
+    * [I'm sorry.]
+    don't # from: t3 # delay: 600
+    don't do that either # from: t3 # delay: 700
+
+- you get to have tonight # from: t3 # delay: 1400
+do you understand what that is. do you understand what i would do # from: t3 # delay: 1800
+and you're sat there taking notes # from: t3 # delay: 1500
+    * [Then help me get it right.]
+    * [You'd do the same as me.]
+    would i # from: t3 # delay: 900
+
+- i had one # from: t3 # delay: 1600
+~ gain(C_T3_WAS_WARNED, "T-3 received this same call in his own tonight — and did nothing.", "t3")
+i had a tonight. someone messaged me the 14th and told me the same as i told you # from: t3 # delay: 2200
+    * [What did you do?]
+    * [You never said.]
+    no # from: t3 # delay: 700
+
+- i thought it was one of the lads winding me up. i was three drinks in by nine o'clock # from: t3 # delay: 2000
+i put the phone in my coat # from: t3 # delay: 1300
+so don't # from: t3 # delay: 900
+don't tell me what you'd do, because i said the same thing to whoever it was, word for word, and then i put the phone in my coat # from: t3 # delay: 2400
+~ tick()
 ~ tick()
 -> t3_hub
 
@@ -134,6 +187,17 @@ i thought it was one of the lads. i've thought it was one of the lads for twenty
         i know it wasn't out because i remember the moths. there were moths all round it # from: t3 # delay: 1700
         you don't get moths round a light that isn't on # from: t3 # delay: 1400
 
+    - quoting == "C_T3_WAS_WARNED":
+        i've told you. i'm not going through it again # from: t3 # delay: 1300
+        { t3_turned:
+            ask me anything else. anything. just not that # from: t3 # delay: 1600
+        }
+
+    - quoting == "C_COUNT_ASSUMES":
+        eleven # from: t3 # delay: 800
+        i've never counted # from: t3 # delay: 900
+        i didn't know there was a number # from: t3 # delay: 1400
+
     - quoting == "C_TIME_CALL":
         half one, twenty to two, i don't know # from: t3 # delay: 1100
         i wasn't looking at a clock. he would've been # from: t3 # delay: 1500
@@ -157,3 +221,4 @@ VAR t3_asked_car = false
 VAR t3_asked_ford = false
 VAR t3_asked_porch = false
 VAR t3_asked_gap = false
+VAR t3_turned = false

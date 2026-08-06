@@ -13,9 +13,11 @@
 
 INCLUDE claims.ink
 INCLUDE endings.ink
+INCLUDE t2.ink
 INCLUDE t3.ink
 INCLUDE t7.ink
 INCLUDE t9.ink
+INCLUDE t11.ink
 INCLUDE t12.ink
 
 // Chapters. Prequels (2a–2c) and codas (3a–3c). They share this story instance

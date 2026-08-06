@@ -46,15 +46,22 @@ outlasted her, and every one of them has a stake in her staying dead.
 Nell went to a house party out past **the ford** on the river road. You drove her there. You
 were supposed to drive her home. Between **01:20 and 02:05** she left the house on foot.
 
-In eleven of twelve branches she did not survive the night. The divergence between branches is
+In eleven of twelve branches she did not survive the night — **and one of those eleven is a
+guess.** TIMELINE-11's branch has no body, no inquest and no date; somebody put it in the column
+to make the column add up. He knows that, and it is the only hope he has. Nothing in the game
+resolves it. The divergence between branches is
 never dramatic — it's a phone that was or wasn't charged, a door that was or wasn't locked, a
 five-minute argument that did or didn't happen. **The thing that saves her is small**, which is
 why nobody has ever agreed on what it was.
 
-## 4. The four selves
+## 4. The six selves
 
-Same person. Four different accommodations with the same guilt. Each gets a color grade
+Same person. Six different accommodations with the same guilt. Each gets a color grade
 (`design/survivor-bias-tokens.json → timelines`) and a distinct register.
+
+They are a **web, not a cast**: each one is a different answer to the same moral question, and
+they are defined against each other rather than individually. `docs/STRUCTURE_TRUBY.md` holds the
+role map and the 22-step audit that produced the last two.
 
 ### TIMELINE-3 — *sodium-orange* — "the one who stayed"
 Never left town. Drinks. Was in the car that night. Talks the most, apologises the most, and is
@@ -119,6 +126,67 @@ would, being separated on lightness rather than hue.
 
 > **The lesson he teaches, which the game had no way to teach before him:
 > corroboration is not verification.**
+
+### TIMELINE-2 — *ice* — "the one who forgave himself"
+
+The **moral opponent**. Every other self fights the plan; he fights the point.
+
+He went to therapy, he did the work, he grieved his sister and he put it down — and he is the
+warmest and least defended person in the game. He is not T-12. T-12 is frightened and lying. T-2
+is not frightened of anything, and he does not lie, withhold or launder. He simply stopped
+collecting, fifteen years ago, and that is a position on the moral problem rather than an absence
+of one.
+
+**The rule for writing him: everything he says must be genuinely healthy.** No smugness, no
+platitudes, no wellness vocabulary, no tell that marks him as wrong. He should be the person you
+would most want to be, and the reason you cannot be him tonight. If he reads as a strawman he
+does nothing; if he reads as right, the player has to choose to act anyway.
+
+- **Gives:** no claims at all. He gave that up. The one self who files nothing.
+- **Withholds:** nothing — but he knows who is at fault, has known since 2009, and refuses to
+  say it in a way you can use. *"I'm not going to help you build a case against a nineteen-year-old."*
+- **Uniquely:** he is the only character who argues the player should stop playing, and the only
+  one who asks what the player is doing it *for*. *"If you fix tonight you get her back, and you
+  also get to be the one who did it, forever."*
+- **Never contests anything.** Refusing the frame is not the same as disputing the fact, and the
+  distinction is the whole character.
+- **Register:** unhurried, plain, kind. Short paragraphs. Asks questions and waits. The only self
+  curious about the player rather than about the night.
+
+**Grade: ice.** Pale, cold, clear — the temperature of someone who has stopped maintaining it.
+
+---
+
+### TIMELINE-11 — *brass* — "the one who never found out"
+
+The **visit to death**, and the game's low point. In his branch she walked down the river road
+and was never found. No body, so no inquest, no cause, no date. There is no stone. There is a
+bench.
+
+He is still looking, in the way you look after twenty years: a folder that used to be a room,
+one call a year to a station where nobody remembers the case, a forum with two people left on it.
+He gives the reference number more readily than her name.
+
+**He is not an opponent.** He wants the player to succeed more than anyone in the game does, and
+that is exactly what makes him hard to sit with. He is what ending C looks like as a whole life,
+and the player meets him *before* choosing it.
+
+- **Gives:** the one claim that is about the game's own premise rather than about that night —
+  that "eleven of twelve" counts his branch as a death when his branch has no finding in it.
+- **Withholds:** nothing. He has spent twenty years being told he is the only one still asking,
+  and he volunteers everything.
+- **Uniquely:** he is the only self who thanks the player, and the only one who tells them to
+  decide *anything* rather than get it right. *"Deciding wrong is survivable. I've met men who
+  decided wrong. They're in worse shape than the ones who were right and better shape than me."*
+- **On the convergence screen he never fully goes out.** There is no moment for his line to end
+  at, so it dims and stays, and his terminal label reads NO RECORD rather than NO SIGNAL.
+- **Register:** flat, practical, over-prepared. Reference numbers and dates of letters. Talks
+  about the case like a job he has had too long. Never says "died" about her.
+
+**Grade: brass.** Tarnished — the plaque on the bench. Was rust until the accessibility pass
+killed it; see the craft note in `docs/STRUCTURE_TRUBY.md` for why no rust can work here.
+
+---
 
 ## 5. The mechanic — cross-examination by quoting
 

@@ -90,6 +90,18 @@ PORTRAIT_PROMPTS = {
         "chair, reading glasses, looking down at it and not answering, "
         "folders and loose papers stacked beside him, " + LOOK
     ),
+    "t2": (
+        "close portrait of a calm well-rested white man in his early forties standing at a "
+        "window in pale cold winter daylight, plain jumper, faint half-smile, "
+        "three-quarter profile with most of the face in soft shadow, unhurried, "
+        "a bright empty room behind him, " + LOOK
+    ),
+    "t11": (
+        "close portrait of a weathered white man in his early forties standing outdoors on a "
+        "riverbank in low amber evening light in an old waxed coat, face turned away from camera looking down "
+        "a road, grey stubble, deep lines, one hand holding a worn cardboard folder, "
+        "bare winter trees, " + LOOK
+    ),
     "nell": (
         "candid photo of a nineteen year old white woman with dark hair laughing, "
         "warm kitchen light at a house party at night, slightly blurred motion, "
@@ -129,9 +141,11 @@ EVIDENCE_PROMPTS = {
 
 # Per-branch duotone, pulled from the style lock so there is one source of truth.
 GRADES = {
+    "t2": TOKENS["timelines"]["t2"]["duotone"],
     "t3": TOKENS["timelines"]["t3"]["duotone"],
     "t7": TOKENS["timelines"]["t7"]["duotone"],
     "t9": TOKENS["timelines"]["t9"]["duotone"],
+    "t11": TOKENS["timelines"]["t11"]["duotone"],
     "t12": TOKENS["timelines"]["t12"]["duotone"],
     "nell": ["#1A1008", "#F2D9B0"],   # warm — she is the only warm thing in the game
     # Evidence inherits the grade of whoever sends it.
@@ -330,15 +344,22 @@ def rupert_image_post(path_frag: str, files: dict, data: dict | None = None):
     return r.json()
 
 
+# Every self, in branch order. The gate walks all pairs of whichever of these
+# are present — it used to name t3/t7/t12 literally, which silently left t9, t2
+# and t11 ungated the moment they were added. Derived from the id list so a
+# seventh self cannot slip past it either.
+SELF_IDS = ("t2", "t3", "t7", "t9", "t11", "t12")
+
+
 def lpips_gate(portraits: dict[str, Path]) -> list[str]:
-    """Keep the three selves inside a similarity band.
+    """Keep the selves inside a similarity band.
 
     Too similar and they're the same photo re-graded; too different and they stop
     being one man. LPIPS is perceptual distance, so lower means more alike. The
     band is empirical — the run prints every pair so it can be re-tuned.
     """
     notes = []
-    ids = [k for k in ("t3", "t7", "t12") if k in portraits]
+    ids = [k for k in SELF_IDS if k in portraits]
     for i, a in enumerate(ids):
         for b in ids[i + 1 :]:
             try:
@@ -463,9 +484,9 @@ def main() -> int:
     if total:
         print(f"\n  total art payload: {total:.0f} KB")
 
-    portraits = {k: v for k, v in written.items() if k in ("t3", "t7", "t12")}
+    portraits = {k: v for k, v in written.items() if k in SELF_IDS}
     if len(portraits) >= 2:
-        print("\nLPIPS drift gate (same man, three lives):")
+        print(f"\nLPIPS drift gate (same man, {len(portraits)} lives):")
         for line in lpips_gate(portraits):
             print(line)
 

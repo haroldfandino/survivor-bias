@@ -30,9 +30,18 @@ LIST Claim =
     // the other three. Two of these are his own eyes; one is an echo of T-12.
     C_CALL_RANG_OUT,    // TRUE  — T-9 watched the 01:38 call ring out on his own phone
     C_ROW_DAY_BEFORE,   // TRUE  — he and Nell argued the day before; he didn't go
-    C_T9_LAUNDERED      // FALSE — T-9 restates a T-12 fabrication as established fact,
+    C_T9_LAUNDERED,     // FALSE — T-9 restates a T-12 fabrication as established fact,
                         //         complete with a date and a source. Corroboration
                         //         that isn't verification — see BIBLE.md §4.
+    // --- TIMELINE-11: the one who never found out --------------------------
+    C_T3_WAS_WARNED,    // TRUE  — T-3 got this same call, in his own tonight,
+                        //         from someone claiming to be him. He did nothing.
+                        //         The player is not the first. Attack by ally.
+    C_COUNT_ASSUMES     // TRUE  — "eleven of twelve" counts his branch as a death.
+                        //         In his she was never found, so the count is a
+                        //         decision somebody made, not a finding. The one
+                        //         claim that is about the GAME'S premise rather
+                        //         than about that night.
 
 // Claims the player currently holds.
 VAR known = ()
@@ -81,3 +90,6 @@ VAR quoting = ""
 
 === function count_known() ===
     ~ return LIST_COUNT(known)
+
+=== function count_contested() ===
+    ~ return LIST_COUNT(contested)

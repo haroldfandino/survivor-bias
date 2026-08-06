@@ -4,9 +4,11 @@
  */
 export type Sender =
   | 'you'
+  | 't2'
   | 't3'
   | 't7'
   | 't9'
+  | 't11'
   | 't12'
   | 'prime'
   | 'nell'
