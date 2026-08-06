@@ -51,9 +51,9 @@ never dramatic — it's a phone that was or wasn't charged, a door that was or w
 five-minute argument that did or didn't happen. **The thing that saves her is small**, which is
 why nobody has ever agreed on what it was.
 
-## 4. The three selves
+## 4. The four selves
 
-Same person. Three different accommodations with the same guilt. Each gets a color grade
+Same person. Four different accommodations with the same guilt. Each gets a color grade
 (`design/survivor-bias-tokens.json → timelines`) and a distinct register.
 
 ### TIMELINE-3 — *sodium-orange* — "the one who stayed"
@@ -83,6 +83,42 @@ cannot survive being wrong about the last twenty years.
 - **Withholds:** his motive, until the end.
 - **Register:** clipped, edited, punctuated. Types like someone who rereads before sending.
   Never sends voice notes. That absence is a clue.
+
+### TIMELINE-9 — *paper* — "the one who didn't go"
+
+The fourth self, and the only one who wasn't there.
+
+He and Nell argued the day before. So he didn't go to the party — and at 01:38 he was awake,
+at home, and he watched her name come up and let it ring. The other three *couldn't* answer:
+drunk in a car, at the gate, asleep three hundred miles away. **He chose not to.** That makes
+him the closest of them to the player's own situation: the decision ending A turns on is the
+one he already got wrong.
+
+Having no account of his own, he has spent twenty years assembling everyone else's — a file,
+built from three unreliable narrators. He is helpful, sober, generous with detail, and the most
+believable person in the game.
+
+**He is also how T-12's lies get laundered.** He repeats the fabrications as established fact,
+not because he's lying but because he got them from T-12 twenty years ago and has never had any
+way to check. Two sources appear to agree; one is an echo.
+
+- **Gives:** first-hand confirmation that the call happened at 01:38 and rang out — the only
+  independent corroboration of the thing ending A turns on. Plus T-12's fabrications, restated
+  with a citation and a date, which is exactly what makes them dangerous.
+- **Withholds:** that he was awake. He'll say he "missed it" for a long time before he'll say
+  he watched it.
+- **Uniquely:** he is the only self who can be *changed* by evidence. Put a contested claim to
+  him and he goes back through the file and finds out where he got it. He is the only one who
+  ever says "then I've been wrong about that for twenty years."
+- **Register:** careful, past-tense, sourced. Says "according to" and "he told me in 2011". The
+  only self who cites. Never a raw assertion when a provenance will do.
+
+**Grade: paper.** A desaturated warm bone tone rather than a fourth saturated hue — he reads as
+a document, not a person who was there. It also survives dichromacy better than another mid-tone
+would, being separated on lightness rather than hue.
+
+> **The lesson he teaches, which the game had no way to teach before him:
+> corroboration is not verification.**
 
 ## 5. The mechanic — cross-examination by quoting
 

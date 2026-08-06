@@ -28,6 +28,15 @@ export const CONTACTS: Contact[] = [
     reachable: true,
   },
   {
+    id: 't9',
+    label: 'TIMELINE-9',
+    blurb: "the one who didn't go",
+    tint: 'var(--color-t9)',
+    entry: 't9_open',
+    quoteEntry: 't9_quote',
+    reachable: true,
+  },
+  {
     id: 't12',
     label: 'TIMELINE-12',
     blurb: 'the one who got out',

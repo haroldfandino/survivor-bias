@@ -66,9 +66,11 @@ PAIRS = [
     ("unread badge", "#FFFFFF", C["accent"], "normal"),
     ("T-3 name", T["t3"]["key"], BG, "normal"),
     ("T-7 name", T["t7"]["key"], BG, "normal"),
+    ("T-9 name", T["t9"]["key"], BG, "normal"),
     ("T-12 name", T["t12"]["key"], BG, "normal"),
     ("T-3 name on bubble", T["t3"]["key"], RAISED, "normal"),
     ("T-7 name on bubble", T["t7"]["key"], RAISED, "normal"),
+    ("T-9 name on bubble", T["t9"]["key"], RAISED, "normal"),
     ("T-12 name on bubble", T["t12"]["key"], RAISED, "normal"),
     ("YOU on convergence", T["prime"]["key"], BG, "normal"),
 ]
@@ -139,12 +141,13 @@ def main() -> int:
 
     print("\nBranch-grade separation under colour-vision deficiency")
     print("  (deltaE; <10 means two timelines start looking alike)\n")
-    keys = {k: T[k]["key"] for k in ("t3", "t7", "t12")}
+    keys = {k: T[k]["key"] for k in ("t3", "t7", "t9", "t12")}
     collapses = []
     for cvd, matrix in [("normal vision", None), *CVD.items()]:
         m = None if matrix is None else matrix
         row = []
-        for a, b in (("t3", "t7"), ("t3", "t12"), ("t7", "t12")):
+        pairs = [(a, b) for i, a in enumerate(keys) for b in list(keys)[i + 1 :]]
+        for a, b in pairs:
             d = delta_e(keys[a], keys[b], m)
             row.append(f"{a}/{b} {d:5.1f}")
             if d < 10:

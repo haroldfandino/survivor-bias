@@ -24,7 +24,15 @@ LIST Claim =
     C_FORD_LIGHT,       // FALSE — T-12: the ford light was out that night
     // --- people ---
     C_WHO_ARGUED,       // TRUE  — she argued with someone on the porch
-    C_WHO_DROVE         // FALSE — T-12: someone else drove her home
+    C_WHO_DROVE,        // FALSE — T-12: someone else drove her home
+    // --- TIMELINE-9: the one who wasn't there ------------------------------
+    // He has no account of that night, so everything he "knows" is sourced from
+    // the other three. Two of these are his own eyes; one is an echo of T-12.
+    C_CALL_RANG_OUT,    // TRUE  — T-9 watched the 01:38 call ring out on his own phone
+    C_ROW_DAY_BEFORE,   // TRUE  — he and Nell argued the day before; he didn't go
+    C_T9_LAUNDERED      // FALSE — T-9 restates a T-12 fabrication as established fact,
+                        //         complete with a date and a source. Corroboration
+                        //         that isn't verification — see BIBLE.md §4.
 
 // Claims the player currently holds.
 VAR known = ()

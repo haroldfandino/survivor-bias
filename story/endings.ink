@@ -183,9 +183,10 @@ It rings at 01:38 for forty seconds. # from: system # delay: 2800
 
 - - - # from: system # delay: 3000
 
-They come back the next morning, all three of them, and they are careful with you. # from: system # delay: 2800
+They come back the next morning, all four of them, and they are careful with you. # from: system # delay: 2800
 TIMELINE-7 sends you a timeline. It's very precise. He has already worked out that there was nothing you could have done. # from: system # delay: 3000
 TIMELINE-3 says he's glad it wasn't just him. # from: system # delay: 2600
+TIMELINE-9 says nothing for two days, and then sends one line: *welcome.* # from: system # delay: 3000
 TIMELINE-12 says: *now you understand.* # from: system # delay: 2600
 And he is kind about it. That's the part you won't get over. # from: system # delay: 2800
 He was never trying to hurt you. He was trying to bring you home. # from: system # delay: 3000
@@ -220,7 +221,7 @@ You couldn't say afterwards whether that was a decision. # from: system # delay:
 In the morning there's one message. # from: system # delay: 2400
 it's alright # from: t3 # delay: 2600
 i didn't pick up either # from: t3 # delay: 2400
-none of us did. that's the whole thing. that's all any of us are # from: t3 # delay: 3000
+none of us did. not one. that's the whole thing. that's all any of us are # from: t3 # delay: 3000
 -> END
 
 // ---------------------------------------------------------------------------

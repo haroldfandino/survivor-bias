@@ -400,6 +400,72 @@ run('CODAS — locked until their own night has been reached', (t) => {
   t.expect('no coda content leaks', !t.said('she asked after you'));
 });
 
+run('TIMELINE-9 — the fourth self, and what he is actually for', (t) => {
+  t.open('t9_open', 'TIMELINE-9');
+  t.pick("You weren't at the party?");
+  t.expect('opens by disclaiming his own reliability', t.said("I wasn't there"));
+
+  t.pick("Why didn't you go?");
+  t.expect('the row is his wound', t.claims.has('C_ROW_DAY_BEFORE'));
+
+  // The laundering. He states a T-12 fabrication as settled, with a date and a
+  // source, which is precisely what makes it land as fact.
+  t.pick("What's in the file?");
+  t.expect('launders a T-12 fabrication as his own settled fact', t.claims.has('C_T9_LAUNDERED'));
+  t.expect('and cites it, which is what makes it dangerous', t.said('I have that from 2011'));
+});
+
+run('TIMELINE-9 — corroboration is not verification', (t) => {
+  // Get the fabrication from T-12 first, then hear T-9 "confirm" it. Two sources
+  // appear to agree; one is an echo. That is the whole mechanic.
+  t.open('t12_open', 'TIMELINE-12');
+  t.pick("They're trying to help.");
+  t.pick('What do you remember?');
+  t.expect('T-12 supplies the fabrication', t.claims.has('C_CAR_MOVED'));
+
+  t.open('t9_open', 'TIMELINE-9');
+  t.pick("You weren't at the party?");
+  t.pick("What's in the file?");
+  t.expect('T-9 appears to independently confirm it', t.said('Then we agree'));
+  t.expect('both claims are now held, neither contested',
+    t.claims.has('C_CAR_MOVED') && !t.contested('C_CAR_MOVED') && !t.contested('C_T9_LAUNDERED'));
+
+  // Now discredit it at T-3, and put it back to T-9. He is the only self in the
+  // game who revises rather than defends.
+  t.quote('C_CAR_MOVED', 't3_quote', 'T-3');
+  t.expect('T-3 contests it', t.contested('C_CAR_MOVED'));
+  t.quote('C_CAR_MOVED', 't9_quote', 'T-9');
+  t.expect('T-9 traces it back and retracts', t.contested('C_T9_LAUNDERED'));
+  t.expect('he names the single source', t.said('It was him, and then me repeating him'));
+});
+
+run('TIMELINE-9 — he chose, where the others could not', (t) => {
+  // His confession needs the call established first, then two presses. The
+  // sequence matters: "missed it" comes before "watched it".
+  t.open('t7_open', 'TIMELINE-7');
+  t.pick("He said it's happening tonight.");
+  t.pick('Walk me through that night.');
+  t.expect('the call is established by T-7', t.claims.has('C_TIME_CALL'));
+
+  t.open('t9_open', 'TIMELINE-9');
+  t.pick("You weren't at the party?");
+  t.pick('She made a call at 01:38.');
+  t.expect('first-hand corroboration of the call', t.claims.has('C_CALL_RANG_OUT'));
+  t.expect('and it is his own record, not an account', t.said("That one's mine"));
+
+  t.pick('Were you awake?');
+  t.expect('reaches for the passive first', t.said('I missed it'));
+  // He offers a sub-choice here; the harder phrasing is the one that lands.
+  t.pick("Missed it, or didn't answer it?");
+  t.expect('he notices you asked it the way T-7 does', t.said('He asks it that way too'));
+  t.expect('has not confessed yet', !t.said('I looked at it until it stopped'));
+
+  t.pick('You watched it ring.');
+  t.expect('the confession lands', t.said('I looked at it until it stopped'));
+  t.expect('he separates himself from the other three', t.said('I could have answered'));
+  t.expect('four seconds is the cost', t.said('about four seconds'));
+});
+
 // ===========================================================================
 
 if (failures) {
@@ -407,5 +473,5 @@ if (failures) {
   process.exit(1);
 }
 console.log(
-  '\n\x1b[32mplaytest PASS\x1b[0m — 10 scenarios, all 3 endings + 3 prequels + codas verified',
+  '\n\x1b[32mplaytest PASS\x1b[0m — 13 scenarios: 3 endings, 3 prequels, codas, and TIMELINE-9',
 );

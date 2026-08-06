@@ -19,10 +19,11 @@ import { useGame } from '../state/game';
  */
 
 const BRANCHES = [
-  { id: 't3', label: 'TIMELINE-3', x: 62, tint: 'var(--color-t3)', answered: false },
-  { id: 't7', label: 'TIMELINE-7', x: 148, tint: 'var(--color-t7)', answered: false },
-  { id: 'prime', label: 'YOU', x: 244, tint: '#E4E6EA', answered: true },
-  { id: 't12', label: 'TIMELINE-12', x: 330, tint: 'var(--color-t12)', answered: false },
+  { id: 't3', label: 'TIMELINE-3', x: 48, tint: 'var(--color-t3)', answered: false },
+  { id: 't7', label: 'TIMELINE-7', x: 124, tint: 'var(--color-t7)', answered: false },
+  { id: 't9', label: 'TIMELINE-9', x: 200, tint: 'var(--color-t9)', answered: false },
+  { id: 'prime', label: 'YOU', x: 276, tint: '#E4E6EA', answered: true },
+  { id: 't12', label: 'TIMELINE-12', x: 352, tint: 'var(--color-t12)', answered: false },
 ] as const;
 
 const TRUNK_X = 196;
@@ -141,7 +142,11 @@ export function Convergence() {
         {BRANCHES.map((b, i) => {
           const dark = at('darken') && !b.answered;
           // Staggered so they go out one at a time rather than together.
-          const stagger = b.answered ? 0 : i * 1100;
+          const stagger = b.answered ? 0 : i * 900;
+          // T-9 saw the call and chose not to answer, so his marker is drawn as a
+          // ring that was reached and declined rather than one never reached at
+          // all — the only unanswered marker with anything inside it.
+          const declined = b.id === 't9';
 
           return (
             <g key={b.id}>
@@ -170,7 +175,8 @@ export function Convergence() {
                 r={b.answered ? 7 : 5}
                 fill={b.answered ? b.tint : 'var(--color-bg)'}
                 stroke={b.tint}
-                strokeWidth={1.8}
+                strokeWidth={declined ? 2.6 : 1.8}
+                strokeDasharray={declined ? '2 2' : undefined}
                 filter={b.answered && at('markers') ? 'url(#glow)' : undefined}
                 style={{
                   opacity: at('markers') ? (dark ? 0.12 : 1) : 0,
@@ -188,8 +194,8 @@ export function Convergence() {
                 y={END_Y + 26}
                 textAnchor="middle"
                 className="font-mono"
-                fontSize={9}
-                letterSpacing={1.4}
+                fontSize={8}
+                letterSpacing={0.8}
                 fill={dark ? 'var(--color-ink-faint)' : b.tint}
                 style={{
                   opacity: at('branches') ? 1 : 0,

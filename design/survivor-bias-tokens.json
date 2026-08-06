@@ -42,6 +42,13 @@
       "duotone": ["#08110F", "#8FC4B4"],
       "note": "Fluorescent institutional green. Corridors, waiting rooms, paperwork."
     },
+    "t9": {
+      "label": "TIMELINE-9",
+      "key": "#C9BFA8",
+      "grade": "paper",
+      "duotone": ["#14120E", "#DCD3BE"],
+      "note": "Bone/paper. Desaturated on purpose: he was never at the party, so he reads as a document rather than a fourth saturated hue. Separated from the others on LIGHTNESS, which is the axis that survives dichromacy."
+    },
     "t12": {
       "label": "TIMELINE-12",
       "key": "#6B90C4",

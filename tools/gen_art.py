@@ -84,6 +84,12 @@ PORTRAIT_PROMPTS = {
         "cold blue pre-dawn light, expensive open-collar shirt, turned away from camera "
         "so most of the face is in shadow, controlled, " + LOOK
     ),
+    "t9": (
+        "close portrait of a careful sober white man in his early forties sitting alone in "
+        "a dim living room at night, lit from below by a phone screen on the arm of his "
+        "chair, reading glasses, looking down at it and not answering, "
+        "folders and loose papers stacked beside him, " + LOOK
+    ),
     "nell": (
         "candid photo of a nineteen year old white woman with dark hair laughing, "
         "warm kitchen light at a house party at night, slightly blurred motion, "
@@ -125,6 +131,7 @@ EVIDENCE_PROMPTS = {
 GRADES = {
     "t3": TOKENS["timelines"]["t3"]["duotone"],
     "t7": TOKENS["timelines"]["t7"]["duotone"],
+    "t9": TOKENS["timelines"]["t9"]["duotone"],
     "t12": TOKENS["timelines"]["t12"]["duotone"],
     "nell": ["#1A1008", "#F2D9B0"],   # warm — she is the only warm thing in the game
     # Evidence inherits the grade of whoever sends it.

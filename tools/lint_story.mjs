@@ -320,9 +320,16 @@ if (orphans.length) {
 for (const w of warnings) console.warn(`\x1b[33mwarn\x1b[0m  ${w}`);
 for (const e of errors) console.error(`\x1b[31mfail\x1b[0m  ${e}`);
 
+// The walk enters each thread in isolation, so cross-thread unlocks are invisible
+// to it: T-9's call branch needs C_TIME_CALL from T-7 before it opens, and a
+// conditional contest (t9_quote only retracts once C_CAR_MOVED is already
+// contested) needs prior state the coverage pass never sets up. So `contestable`
+// is a FLOOR, not a total — tools/playtest.mjs walks real routes and is the
+// authority on what actually fires. Said out loud because an undercount that
+// looks like a total is worse than no number.
 const metric = [
   `claims ${gainedClaims.size}/${declaredClaims.size} obtainable`,
-  `${contestedClaims.size}/${declaredClaims.size} contestable`,
+  `${contestedClaims.size}/${declaredClaims.size} contestable (floor)`,
   `${orphans.length} orphan`,
   `${paths} paths walked`,
   `${quotePairs} quote pairs`,
